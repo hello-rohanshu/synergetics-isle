@@ -153,3 +153,9 @@ Everything will be at one place, updatable in a matter of seconds. Casey's infog
 - Faster search than any PDF
 - In-built AI
 - Prospects of "3D" and interactive animations: sample
+
+
+# Timeline
+- Bucky published Synergetics 1 and 2
+- R.W. Gray scanned the books and made them available online
+- Rohanshu made the pure html into a modern markdown based resource
