@@ -152,8 +152,8 @@ Everything will be at one place, updatable in a matter of seconds. Casey's infog
 - One click link copying
 - Faster search than any PDF
 - In-built AI
-- Prospects of "3D" and interactive animations: sample
-
+- Prospects of "3D" and interactive animations
+- Easy to correct on-the-go
 
 # Timeline
 - Bucky published Synergetics 1 and 2
