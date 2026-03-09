@@ -8,7 +8,7 @@ import * as Plugin from "./quartz/plugins"
  */
 const config: QuartzConfig = {
   configuration: {
-    pageTitle: "Synergetics (Beta)",
+    pageTitle: "Synergetics (In Alpha)",
     pageTitleSuffix: "",
     enableSPA: true,
     enablePopovers: true,
