@@ -35,19 +35,18 @@ export const defaultContentPageLayout: PageLayout = {
     Component.MobileOnly(Component.Spacer()),
     Component.Flex({
       components: [
-
         {
           Component: Component.Search(),
           grow: true,
         },
-        { Component: Component.AIButton() },
         { Component: Component.Darkmode() },
-        //{ Component: Component.ReaderMode() },
+        { Component: Component.ReaderMode() },
+        { Component: Component.AIButton() },
       ],
     }),
-Component.Explorer({
-  filterFn: (node) => !(node as any).data?.tags?.includes("unlisted"),
-}),
+    Component.Explorer({
+      filterFn: (node) => !(node as any).data?.tags?.includes("unlisted"),
+    }),
   ],
   right: [
     Component.Graph(),
@@ -71,9 +70,9 @@ export const defaultListPageLayout: PageLayout = {
         { Component: Component.Darkmode() },
       ],
     }),
-Component.Explorer({
-  filterFn: (node) => !(node as any).data?.tags?.includes("unlisted"),
-}),
+    Component.Explorer({
+      filterFn: (node) => !(node as any).data?.tags?.includes("unlisted"),
+    }),
   ],
   right: [],
 }
