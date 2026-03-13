@@ -3,5 +3,4 @@ title: Synergetics AI
 cssclasses: [ai-page]
 tags: [unlisted]
 ---
-
-Currently in Alpha. Works, but haphazardly.
+AI last indexed on the content on 12th of March 2026.

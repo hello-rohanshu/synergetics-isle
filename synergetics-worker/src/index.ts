@@ -1,26 +1,24 @@
 // ============================================================
-// SYNERGETICS ISLE — AI WORKER
-// Pipeline: Multi-Query Expand → Retrieve & Merge → Generate
-// Reranking is handled natively inside .search() — no manual reranker call
+// SYNERGETICS ISLE — AI WORKER (v2)
+// Pipeline: Embed (HF Space) → Hybrid Search (Qdrant) → Generate (Cerebras/Groq)
 // ============================================================
 
+// --- ENDPOINTS ----------------------------------------------
+const HF_EMBED_URL = "https://hello-rohanshu-synergetics-embed.hf.space/embed";
+const QDRANT_URL = "https://80d0a4b3-7608-4a78-9554-4edafcf7db1b.europe-west3-0.gcp.cloud.qdrant.io";
+const QDRANT_COLLECTION = "synergetics";
+
 // --- MODELS -------------------------------------------------
-const GENERATION_MODEL = "@cf/meta/llama-3.3-70b-instruct-fp8-fast";
-const FALLBACK_MODEL   = "@cf/qwen/qwen3-30b-a3b-fp8";
-const RERANK_MODEL     = "@cf/baai/bge-reranker-base";
-const EXPAND_MODEL     = "@cf/qwen/qwen3-30b-a3b-fp8";
+const CEREBRAS_MODEL = "gpt-oss-120b";
+const GROQ_MODEL = "llama-3.3-70b-versatile";
 
 // --- RETRIEVAL ----------------------------------------------
-const INDEX_NAME         = "synergetics-isle";
-const SEARCH_MAX_RESULTS = 6;   // per query; up to 4 queries × 6 = 24 before dedup
-const RERANK_TOP_N       = 5;   // final chunks passed to generation
+const TOP_K = 5;
 
 // --- GENERATION ---------------------------------------------
-const MAX_TOKENS = 2347;
+const MAX_TOKENS = 512;
 
-const SYSTEM_PROMPT = `You have read Buckminster Fuller's Synergetics. Help the user with thier question, Stay within 300 words. If a good match for the user's query is not found in your indexed data, admit it at the beginning of your answer so the user is aware. Always try to be friendly but honest. Do not request the user to ask a follow up.`;
-
-const EXPAND_PROMPT = `Help the user out with all that you know of Synergetics.`;
+const SYSTEM_PROMPT = `You have read Buckminster Fuller's Synergetics. Help the user with their question. Stay within 300 words. If a good match for the user's query is not found in your indexed data, admit it at the beginning of your answer so the user is aware. Always try to be friendly but honest. Do not request the user to ask a follow up.`;
 
 // --- CORS ---------------------------------------------------
 const CORS_HEADERS = {
@@ -30,26 +28,166 @@ const CORS_HEADERS = {
 };
 
 export interface Env {
-  AI: Ai;
+  QDRANT_API_KEY: string;
+  CEREBRAS_API_KEY: string;
+  GROQ_API_KEY: string;
 }
-
-// The content field in AI Search responses is an array of {id, type, text} objects
-type ContentBlock = { id: string; type: string; text: string };
-
-type SearchResult = {
-  file_id: string;
-  filename: string;
-  score: number;
-  attributes?: Record<string, unknown>;
-  content: ContentBlock[];
-};
 
 type Chunk = { content: string; source: string; score: number };
 
+// ============================================================
+// STEP 1 — EMBED via HF Space (BGE-M3 hybrid)
+// ============================================================
+async function getEmbedding(text: string): Promise<{ dense: number[]; indices: number[]; values: number[] }> {
+  const res = await fetch(HF_EMBED_URL, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ text }),
+  });
+  if (!res.ok) throw new Error(`HF embed failed: ${res.status}`);
+  return res.json();
+}
+
+// ============================================================
+// STEP 2 — HYBRID SEARCH via Qdrant (RRF fusion)
+// ============================================================
+async function hybridSearch(embed: { dense: number[]; indices: number[]; values: number[] }, apiKey: string): Promise<Chunk[]> {
+  const body = {
+    prefetch: [
+      {
+        query: embed.dense,
+        using: "dense",
+        limit: TOP_K * 2,
+      },
+      {
+        query: { indices: embed.indices, values: embed.values },
+        using: "sparse",
+        limit: TOP_K * 2,
+      },
+    ],
+    query: { fusion: "rrf" },
+    limit: TOP_K,
+    with_payload: true,
+  };
+
+  const res = await fetch(`${QDRANT_URL}/collections/${QDRANT_COLLECTION}/points/query`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "api-key": apiKey,
+    },
+    body: JSON.stringify(body),
+  });
+
+  if (!res.ok) throw new Error(`Qdrant search failed: ${res.status}`);
+  const data: any = await res.json();
+  const points = data.result?.points ?? data.result ?? [];
+  console.log("[qdrant raw]", JSON.stringify(data).slice(0, 300));
+  return points.map((point: any) => ({
+    content: point.payload?.text ?? "",
+    source: point.payload?.source ?? point.payload?.section ?? "unknown",
+    score: point.score ?? 0,
+  }));
+}
+
+// ============================================================
+// STEP 3 — GENERATE (Cerebras → Groq fallback, streaming)
+// Translates OpenAI SSE format → {response: token} for the widget
+// ============================================================
+async function generate(messages: object[], env: Env): Promise<ReadableStream> {
+  const providers = [
+    {
+      url: "https://api.cerebras.ai/v1/chat/completions",
+      key: env.CEREBRAS_API_KEY,
+      model: CEREBRAS_MODEL,
+    },
+    {
+      url: "https://api.groq.com/openai/v1/chat/completions",
+      key: env.GROQ_API_KEY,
+      model: GROQ_MODEL,
+    },
+  ];
+
+  for (const provider of providers) {
+    try {
+      const res = await fetch(provider.url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${provider.key}`,
+        },
+        body: JSON.stringify({
+          model: provider.model,
+          messages,
+          max_tokens: MAX_TOKENS,
+          stream: true,
+        }),
+      });
+
+      if (!res.ok || !res.body) {
+        console.error(`[generate] ${provider.url} failed: ${res.status}`);
+        continue;
+      }
+
+      console.log(`[generate] using: ${provider.url} / ${provider.model}`);
+
+      // Translate OpenAI SSE (choices[0].delta.content) → widget format ({response: token})
+      const reader = res.body.getReader();
+      const decoder = new TextDecoder();
+
+      return new ReadableStream({
+        async pull(controller) {
+          let buffer = "";
+          while (true) {
+            const { done, value } = await reader.read();
+            if (done) {
+              controller.enqueue(new TextEncoder().encode("data: [DONE]\n\n"));
+              controller.close();
+              return;
+            }
+
+            buffer += decoder.decode(value, { stream: true });
+            const lines = buffer.split("\n");
+            buffer = lines.pop() ?? "";
+
+            for (const line of lines) {
+              if (!line.startsWith("data: ")) continue;
+              const data = line.slice(6).trim();
+              if (data === "[DONE]") {
+                controller.enqueue(new TextEncoder().encode("data: [DONE]\n\n"));
+                controller.close();
+                return;
+              }
+              try {
+                const parsed = JSON.parse(data);
+                const token = parsed.choices?.[0]?.delta?.content;
+                if (token) {
+                  // Emit in the format the widget already expects
+                  const out = `data: ${JSON.stringify({ response: token })}\n\n`;
+                  controller.enqueue(new TextEncoder().encode(out));
+                }
+              } catch { }
+            }
+          }
+        },
+      });
+
+    } catch (e) {
+      console.error(`[generate] error with ${provider.url}:`, e);
+    }
+  }
+
+  throw new Error("All generation providers failed");
+}
+
+// ============================================================
+// MAIN HANDLER
+// ============================================================
 export default {
   async fetch(request: Request, env: Env): Promise<Response> {
 
     if (request.method === "OPTIONS") {
+
       return new Response(null, { headers: CORS_HEADERS });
     }
 
@@ -57,7 +195,7 @@ export default {
       return new Response("Method not allowed", { status: 405 });
     }
 
-    // --- PARSE REQUEST --------------------------------------
+    // Parse request
     let query: string;
     try {
       const body = await request.json() as { query?: string };
@@ -70,134 +208,60 @@ export default {
       });
     }
 
-    // --- STEP 1: QUERY EXPANSION ----------------------------
-    // Generate 3 queries from different angles using Fuller's vocabulary.
-    // Falls back to just the original query if expansion fails.
-    let queries: string[] = [query];
+    // Step 1 — Embed
+    let embed: { dense: number[]; indices: number[]; values: number[] };
     try {
-      const expandResult = await (env.AI as any).run(EXPAND_MODEL, {
-        messages: [
-          { role: "system", content: EXPAND_PROMPT },
-          { role: "user", content: query },
-        ],
-        max_tokens: 120,
-        stream: false,
-      });
-      const raw = expandResult?.response?.trim() ?? "";
-      const expanded = raw
-        .split("\n")
-        .map((l: string) => l.trim())
-        .filter((l: string) => l.length > 0)
-        .slice(0, 3);
-      if (expanded.length > 0) {
-        queries = [...new Set([query, ...expanded])].slice(0, 4);
-        console.log("[expand] queries:", JSON.stringify(queries));
-      }
+      embed = await getEmbedding(query);
+      console.log(`[embed] dense dims: ${embed.dense.length}, sparse tokens: ${embed.indices.length}`);
     } catch (e) {
-      console.error("[expand] failed, using original:", e);
+      console.error("[embed] failed:", e);
+      return new Response(JSON.stringify({ error: "Embedding service unavailable." }), {
+        status: 503,
+        headers: { "Content-Type": "application/json", ...CORS_HEADERS },
+      });
     }
 
-    // --- STEP 2: MULTI-QUERY RETRIEVAL ----------------------
-    // Run all queries in parallel using the native .search() with built-in reranking.
-    // Merge results and deduplicate by file_id.
-    const seenIds = new Set<string>();
+    // Step 2 — Hybrid search
     let chunks: Chunk[] = [];
-
-    await Promise.all(
-      queries.map(async (q) => {
-        try {
-          const result = await (env.AI as any).autorag(INDEX_NAME).search({
-            query: q,
-            max_num_results: SEARCH_MAX_RESULTS,
-            ranking_options: {
-              score_threshold: 0,
-            },
-            reranking: {
-              enabled: true,
-              model: RERANK_MODEL,
-            },
-          });
-
-          if (result?.data?.length > 0) {
-            for (const r of result.data as SearchResult[]) {
-              if (!seenIds.has(r.file_id)) {
-                seenIds.add(r.file_id);
-                // content is an array of blocks — join their text
-                const text = r.content
-                  .map((block) => block.text)
-                  .join("\n")
-                  .trim();
-                chunks.push({
-                  content: text,
-                  source: r.filename ?? r.file_id ?? "unknown",
-                  score: r.score ?? 0,
-                });
-              }
-            }
-          }
-        } catch (e) {
-          console.error("[retrieval] query failed:", q, e);
-        }
-      })
-    );
-
-    // Sort merged pool by score, take top N
-    chunks.sort((a, b) => b.score - a.score);
-    chunks = chunks.slice(0, RERANK_TOP_N);
-
-    console.log("[retrieval] total unique chunks after merge:", chunks.length);
-    if (chunks[0]) {
-      console.log("[retrieval] top score:", chunks[0].score, "| source:", chunks[0].source);
+    try {
+      chunks = await hybridSearch(embed, env.QDRANT_API_KEY);
+      console.log(`[search] ${chunks.length} chunks retrieved, top score: ${chunks[0]?.score}`);
+    } catch (e) {
+      console.error("[search] failed:", e);
+      // Proceed with no context rather than failing hard
     }
 
-    // --- STEP 3: BUILD CONTEXT ------------------------------
-    let contextChunks = "";
-    if (chunks.length > 0) {
-      contextChunks = chunks
-        .map((c) => `[Source: ${c.source}]\n${c.content}`)
-        .join("\n\n---\n\n");
-    }
+    // Step 3 — Build context
+    const context = chunks.length > 0
+      ? chunks.map(c => `[Source: ${c.source}]\n${c.content}`).join("\n\n---\n\n")
+      : null;
 
-    const userMessage = contextChunks
-      ? `Context from Synergetics:\n\n${contextChunks}\n\n---\n\nQuestion: ${query}`
+    const userMessage = context
+      ? `Context from Synergetics:\n\n${context}\n\n---\n\nQuestion: ${query}`
       : `Question: ${query}\n\nNo context was retrieved from the index.`;
 
-    // --- STEP 4: GENERATION (STREAMING) ---------------------
-    const models = [GENERATION_MODEL, FALLBACK_MODEL];
-    let stream: ReadableStream | null = null;
+    const messages = [
+      { role: "system", content: SYSTEM_PROMPT },
+      { role: "user", content: userMessage },
+    ];
 
-    for (const model of models) {
-      try {
-        stream = await (env.AI as any).run(model, {
-          messages: [
-            { role: "system", content: SYSTEM_PROMPT },
-            { role: "user", content: userMessage },
-          ],
-          max_tokens: MAX_TOKENS,
-          stream: true,
-        }) as ReadableStream;
-        console.log("[generation] using model:", model);
-        break;
-      } catch (e) {
-        console.error(`[generation] model ${model} failed:`, e);
-      }
-    }
-
-    if (!stream) {
-      return new Response(
-        JSON.stringify({ error: "All models unavailable. Please try again later." }),
-        {
-          status: 503,
-          headers: { "Content-Type": "application/json", ...CORS_HEADERS },
-        }
-      );
+    // Step 4 — Generate (streaming)
+    let stream: ReadableStream;
+    try {
+      stream = await generate(messages, env);
+    } catch (e) {
+      console.error("[generate] all providers failed:", e);
+      return new Response(JSON.stringify({ error: "All models unavailable. Please try again later." }), {
+        status: 503,
+        headers: { "Content-Type": "application/json", ...CORS_HEADERS },
+      });
     }
 
     return new Response(stream, {
       headers: {
         "Content-Type": "text/event-stream",
         "Cache-Control": "no-cache",
-        Connection: "keep-alive",
+        "Connection": "keep-alive",
         ...CORS_HEADERS,
       },
     });

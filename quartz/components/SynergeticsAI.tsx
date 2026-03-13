@@ -113,6 +113,100 @@ SynergeticsAI.css = `
   border-radius: 4px;
 }
 
+.answer-content p {
+  margin: 0 0 1rem;
+}
+
+.answer-content p:last-child {
+  margin-bottom: 0;
+}
+
+.answer-content h1,
+.answer-content h2,
+.answer-content h3,
+.answer-content h4 {
+  margin: 1.4rem 0 0.5rem;
+  line-height: 1.3;
+  font-weight: 600;
+}
+
+.answer-content h1 { font-size: 1.382rem; }
+.answer-content h2 { font-size: 1.2rem; }
+.answer-content h3 { font-size: 1.05rem; }
+
+.answer-content ul,
+.answer-content ol {
+  padding-left: 1.5rem;
+  margin: 0.75rem 0;
+}
+
+.answer-content li {
+  margin-bottom: 0.382rem;
+}
+
+.answer-content table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 1rem 0;
+  font-size: 0.9rem;
+}
+
+.answer-content th,
+.answer-content td {
+  border: 1px solid var(--lightgray);
+  padding: 0.5rem 0.75rem;
+  text-align: left;
+}
+
+.answer-content th {
+  font-weight: 600;
+  color: var(--darkgray);
+  background: var(--lightgray);
+}
+
+.answer-content tr:nth-child(even) td {
+  background: color-mix(in srgb, var(--light) 60%, transparent);
+}
+
+.answer-content code {
+  font-family: var(--codeFont, monospace);
+  font-size: 0.875em;
+  background: var(--lightgray);
+  padding: 0.1em 0.35em;
+  border-radius: 3px;
+}
+
+.answer-content pre {
+  background: var(--lightgray);
+  padding: 1rem;
+  border-radius: 4px;
+  overflow-x: auto;
+  margin: 1rem 0;
+}
+
+.answer-content pre code {
+  background: none;
+  padding: 0;
+  font-size: 0.875rem;
+}
+
+.answer-content blockquote {
+  border-left: 3px solid var(--lightgray);
+  margin: 1rem 0;
+  padding: 0.25rem 1rem;
+  color: var(--gray);
+  font-style: italic;
+}
+
+.answer-content strong { font-weight: 600; }
+.answer-content em { font-style: italic; }
+
+.answer-content hr {
+  border: none;
+  border-top: 1px solid var(--lightgray);
+  margin: 1.2rem 0;
+}
+
 .thinking-status {
   display: flex;
   align-items: baseline;
@@ -135,6 +229,28 @@ SynergeticsAI.afterDOMLoaded = `
 (function() {
   if (!document.getElementById("synergetics-container")) return;
   const WORKER_URL = "https://synergetics-worker.rohanshu.workers.dev";
+
+  // Load marked.js for proper markdown rendering
+  if (!window.__markedLoaded) {
+    window.__markedLoaded = new Promise((resolve) => {
+      const script = document.createElement("script");
+      script.src = "https://cdnjs.cloudflare.com/ajax/libs/marked/9.1.6/marked.min.js";
+      script.onload = () => {
+        marked.setOptions({ breaks: true, gfm: true });
+        resolve(marked);
+      };
+      document.head.appendChild(script);
+    });
+  }
+
+  function renderMarkdown(text) {
+    if (window.marked) return window.marked.parse(text);
+    // fallback while marked loads
+    return text
+      .replace(/\\*\\*(.+?)\\*\\*/g, "<strong>$1</strong>")
+      .replace(/\\n\\n/g, "<br><br>")
+      .replace(/\\n/g, "<br>");
+  }
 
   const PLACEHOLDER_MESSAGES = [
     "Type your question here",
@@ -333,10 +449,7 @@ SynergeticsAI.afterDOMLoaded = `
                   streamStarted = true;
                 }
                 content += token;
-                contentEl.innerHTML = content
-                  .replace(/\\*\\*(.+?)\\*\\*/g, "<strong>$1</strong>")
-                  .replace(/\\n\\n/g, "<br><br>")
-                  .replace(/\\n/g, "<br>");
+                contentEl.innerHTML = renderMarkdown(content);
               }
             } catch (e) {}
           }
