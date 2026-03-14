@@ -1,6 +1,30 @@
----
-draft: "true"
----
+Taking care of "To dos" and "Issues" and tags spread across the resource
+
+Organizing the order of the folders and files
+
+Adding next and previous on each page if needed
+
+'Scenarios'
+
+Connecting all links across the board
+
+Arrangement of frontmatter properly
+
+Setting up of a status system, probably based on frontmatter
+	Allowing people to also verify parts flexibly via frontmatter, allowing them to stack their verification on top of previous ones
+Proper easy feedback system
+
+Proper AI integration
+
+Recreating quartz with the right github account
+Re-creating cloudflare domain deployment with the same changes
+
+Public facing changelog and roadmap
+
+Check all the features list in Quartz docs, should have a few worth using
+
+
+
 # To do
 - [ ] try to already get the side bar contents in order. go from whole to less!
 - [ ] get stuff from ticktick to here or otherwise
@@ -23,92 +47,7 @@ draft: "true"
 - [ ] explorer lists stops responding to mouse when the context is an open folder rather than the explorer
 
 
-# Corrections made here
 - 930.20 image isn't anywhere, it had a lame version in buckyverse.org so i added it
-
-# Superscript table
-
-| Number | Subscript | Superscript |
-| ------ | --------- | ----------- |
-| Zero   | ₀         | ⁰           |
-| One    | ₁         | ¹           |
-| Two    | ₂         | ²           |
-| Three  | ₃         | ³           |
-| Four   | ₄         | ⁴           |
-| Five   | ₅         | ⁵           |
-| Six    | ₆         | ⁶           |
-| Seven  | ₇         | ⁷           |
-| Eight  | ₈         | ⁸           |
-| Nine   | ₉         | ⁹           |
-
-π
-—
-→
-
-Code to highlight italics in browser (put in DevTools console):
-```
-	$$('i, em, .italic, [style*="font-style: italic"]').forEach(el => el.style.backgroundColor = 'yellow'); 
-```
-
-
-To highlight figures and equal to signs
-```
-
-(function highlightNumbersAndEquals() {
-    const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null, false);
-    const nodes = [];
-    
-    while (walker.nextNode()) {
-        const parentTag = walker.currentNode.parentElement.tagName;
-        if (parentTag !== 'SCRIPT' && parentTag !== 'STYLE' && parentTag !== 'TEXTAREA') {
-            nodes.push(walker.currentNode);
-        }
-    }
-
-    nodes.forEach(node => {
-        const parent = node.parentNode;
-        if (!parent) return;
-
-        const text = node.nodeValue;
-        // Updated Regex: Matches digits (\d+) OR the equal sign (=)
-        const targetRegex = /(\d+|=)/g;
-
-        if (targetRegex.test(text)) {
-            const span = document.createElement('span');
-            span.innerHTML = text.replace(targetRegex, 
-                '<span style="background-color: red !important; color: white !important; font-weight: bold !important; padding: 0 2px; border-radius: 2px;">$1</span>'
-            );
-            parent.replaceChild(span, node);
-        }
-    });
-})();
-```
-To highlight superscripts
-
-```
-(function() {
-  const superscripts = document.querySelectorAll('sup');
-  
-  superscripts.forEach(el => {
-    el.style.backgroundColor = 'yellow';
-    el.style.border = '1px solid red';
-    el.style.borderRadius = '2px';
-    el.style.padding = '1px';
-  });
-
-  console.log(`Highlighted ${superscripts.length} total superscripts.`);
-})();
-```
-
-
----
-# Rules
-All the main headings are now their own pages.
-All sub headings are H1s.
-All H1s are headings only, with no content. And probably will have a round number thing going on.
-Currently used headings are only: H1, H5, bold
-"img 1072.21" implies text captured as an image
-
 
 # Problems I'm facing
 
@@ -136,26 +75,3 @@ In Omnitopology, a lot of chapters were arranged in PDF's toc as if they're not 
 
 ## Changes
 Fig. 1009.57A is written to be Fig. 1009.75A. I corrected it.
-
-
-
-
-
-
-# Pitch
-Everything will be at one place, updatable in a matter of seconds. Casey's infographic can be embeded here as well.
-
-
-# Features
-- Beautiful on all devices small or big
-- Open source
-- One click link copying
-- Faster search than any PDF
-- In-built AI
-- Prospects of "3D" and interactive animations
-- Easy to correct on-the-go
-
-# Timeline
-- Bucky published Synergetics 1 and 2
-- R.W. Gray scanned the books and made them available online
-- Rohanshu made the pure html into a modern markdown based resource
