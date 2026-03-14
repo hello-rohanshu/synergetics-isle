@@ -35,8 +35,8 @@ const explorerConfig = {
       "Book Index": 28,
       "Extras": 99,
     }
-    const aOrder = order[a.name] ?? 98
-    const bOrder = order[b.name] ?? 98
+    const aOrder = order[a.displayName] ?? 98
+    const bOrder = order[b.displayName] ?? 98
     return aOrder - bOrder
   },
 }
