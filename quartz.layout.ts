@@ -1,6 +1,46 @@
 import { PageLayout, SharedLayout } from "./quartz/cfg"
 import * as Component from "./quartz/components"
 
+const explorerConfig = {
+  filterFn: (node: any) => !(node as any).data?.tags?.includes("unlisted"),
+  sortFn: (a: any, b: any) => {
+    const order: Record<string, number> = {
+      "Copyright": 1,
+      "Dedication": 2,
+      "Acknowledgment": 3,
+      "Table of Contents": 4,
+      "A Note on Collaboration": 5,
+      "Preface": 6,
+      "Moral of the Work": 7,
+      "Author's Note on the Rationale for Repetition in This Work": 8,
+      "Explicit - A note to the reader": 9,
+      "Introduction - The Wellspring of Reality": 10,
+      "Humans In Universe": 11,
+      "Scenarios": 12,
+      "100.00 Synergy": 13,
+      "200.00 Synergetics": 14,
+      "300.00 Universe": 15,
+      "400.00 System": 16,
+      "500.00 Conceptuality": 17,
+      "600.00 Structure": 18,
+      "700.00 Tensegrity": 19,
+      "800.00 Operational Mathematics": 20,
+      "900.00 Modelability": 21,
+      "1000.00 Omnitopology": 22,
+      "1100.00 Constant Zenith Projection": 23,
+      "1200.00 Numerology": 24,
+      "Afterpiece": 25,
+      "32 Color Plates": 26,
+      "Evolution of Synergetics": 27,
+      "Book Index": 28,
+      "Extras": 99,
+    }
+    const aOrder = order[a.name] ?? 98
+    const bOrder = order[b.name] ?? 98
+    return aOrder - bOrder
+  },
+}
+
 // components shared across all pages
 export const sharedPageComponents: SharedLayout = {
   head: Component.Head(),
@@ -44,9 +84,7 @@ export const defaultContentPageLayout: PageLayout = {
         { Component: Component.AIButton() },
       ],
     }),
-    Component.Explorer({
-      filterFn: (node) => !(node as any).data?.tags?.includes("unlisted"),
-    }),
+    Component.Explorer(explorerConfig),
   ],
   right: [
     Component.Graph(),
@@ -72,9 +110,7 @@ export const defaultListPageLayout: PageLayout = {
         { Component: Component.AIButton() },
       ],
     }),
-    Component.Explorer({
-      filterFn: (node) => !(node as any).data?.tags?.includes("unlisted"),
-    }),
+    Component.Explorer(explorerConfig),
   ],
   right: [],
 }
