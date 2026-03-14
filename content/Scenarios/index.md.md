@@ -1,3 +1,7 @@
+---
+title: Scenarios
+---
+
 Each scenario is a narrative sequence of geometrical exposition written-and intended to be read-as a separate continuity.
 
 Child as Explorer	100.01-100.63
