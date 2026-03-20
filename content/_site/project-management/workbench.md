@@ -28,7 +28,7 @@ draft: "true"
 # Snippets to go with Dev Tools
 
 
-### Code to highlight italics in browser (put in DevTools console):
+### Highlight italics:
 ```
 	$$('i, em, .italic, [style*="font-style: italic"]').forEach(el => el.style.backgroundColor = 'yellow'); 
 ```
