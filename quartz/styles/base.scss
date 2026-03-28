@@ -4,6 +4,62 @@
 @use "./syntax.scss";
 @use "./callouts.scss";
 
+// =============================================================================
+// φ — THE SEED
+// 1rem = base. Every size, spacing, and rhythm derives from this sequence.
+// φ⁻² = 0.382  φ⁻¹ = 0.618  φ⁰ = 1  φ¹ = 1.618  φ² = 2.618  φ³ = 4.236
+// =============================================================================
+
+:root {
+  --phi:     1.618;
+  --phi-inv: 0.618;
+  --phi-2:   2.618;
+  --phi-3:   4.236;
+  --phi-sm:  0.382;
+
+  // Spacing scale
+  --sp-2xs: 0.236rem;
+  --sp-xs:  0.382rem;
+  --sp-sm:  0.618rem;
+  --sp-md:  1rem;
+  --sp-lg:  1.618rem;
+  --sp-xl:  2.618rem;
+  --sp-2xl: 4.236rem;
+  --sp-3xl: 6.854rem;
+
+  // Type scale
+  --text-xs:   0.618rem;
+  --text-sm:   0.764rem;
+  --text-base: 1rem;
+  --text-md:   1.272rem;
+  --text-lg:   1.618rem;
+  --text-xl:   2.058rem;
+  --text-2xl:  2.618rem;
+  --text-3xl:  4.236rem;
+
+  // Line heights
+  --lh-tight:  1.272;
+  --lh-base:   1.618;
+  --lh-loose:  2.058;
+
+  // Borders
+  --border-thin:  1px;
+  --border-base:  1.618px;
+  --border-thick: 2.618px;
+
+  // Transitions
+  --transition-fast: 0.236s ease;
+  --transition-base: 0.382s ease;
+  --transition-slow: 0.618s ease;
+
+  // Measure — prose line length ceiling
+  --measure: 72ch;
+}
+
+// =============================================================================
+// BASE
+// =============================================================================
+
 html {
   scroll-behavior: smooth;
   text-size-adjust: none;
@@ -11,7 +67,7 @@ html {
   width: 100vw;
 
   @media all and ($mobile) {
-    scroll-padding-top: 4rem;
+    scroll-padding-top: var(--sp-2xl);
   }
 }
 
@@ -20,14 +76,21 @@ body {
   box-sizing: border-box;
   background-color: var(--light);
   font-family: var(--bodyFont);
+  font-size: var(--text-base);
+  line-height: var(--lh-base);
   color: var(--darkgray);
 }
 
+// =============================================================================
+// TEXT
+// =============================================================================
+
 .text-highlight {
   background-color: var(--textHighlight);
-  padding: 0 0.1rem;
-  border-radius: 5px;
+  padding: 0 var(--sp-2xs);
+  border-radius: 0;
 }
+
 ::selection {
   background: color-mix(in srgb, var(--tertiary) 60%, rgba(255, 255, 255, 0));
   color: var(--darkgray);
@@ -72,8 +135,8 @@ article {
     }
   }
   blockquote > div > mjx-container.MathJax > svg {
-    margin-top: 1rem;
-    margin-bottom: 1rem;
+    margin-top: var(--sp-md);
+    margin-bottom: var(--sp-md);
   }
 }
 
@@ -81,10 +144,14 @@ strong {
   font-weight: $semiBoldWeight;
 }
 
+// =============================================================================
+// LINKS
+// =============================================================================
+
 a {
   font-weight: $semiBoldWeight;
   text-decoration: none;
-  transition: color 0.2s ease;
+  transition: color var(--transition-base);
   color: var(--secondary);
 
   &:hover {
@@ -94,14 +161,14 @@ a {
   &.internal {
     text-decoration: none;
     background-color: var(--highlight);
-    padding: 0 0.1rem;
-    border-radius: 5px;
-    line-height: 1.4rem;
+    padding: 0 var(--sp-2xs);
+    border-radius: 0;
+    line-height: var(--lh-base);
 
     &.broken {
       color: var(--secondary);
       opacity: 0.5;
-      transition: opacity 0.2s ease;
+      transition: opacity var(--transition-base);
       &:hover {
         opacity: 0.8;
       }
@@ -121,13 +188,17 @@ a {
 
   &.external .external-icon {
     height: 1ex;
-    margin: 0 0.15em;
+    margin: 0 var(--sp-2xs);
 
     > path {
       fill: var(--dark);
     }
   }
 }
+
+// =============================================================================
+// LAYOUT
+// =============================================================================
 
 .flex-component {
   display: flex;
@@ -162,9 +233,10 @@ a {
 .page {
   max-width: calc(#{map.get($breakpoints, desktop)} + 300px);
   margin: 0 auto;
+
   & article {
     & > h1 {
-      font-size: 2rem;
+      font-size: var(--text-2xl);
     }
 
     & li:has(> input[type="checkbox"]) {
@@ -192,37 +264,37 @@ a {
     display: grid;
     grid-template-columns: #{map.get($desktopGrid, templateColumns)};
     grid-template-rows: #{map.get($desktopGrid, templateRows)};
-    column-gap: #{map.get($desktopGrid, columnGap)};
-    row-gap: #{map.get($desktopGrid, rowGap)};
+    column-gap: var(--sp-xl);
+    row-gap: var(--sp-lg);
     grid-template-areas: #{map.get($desktopGrid, templateAreas)};
 
     @media all and ($tablet) {
       grid-template-columns: #{map.get($tabletGrid, templateColumns)};
       grid-template-rows: #{map.get($tabletGrid, templateRows)};
-      column-gap: #{map.get($tabletGrid, columnGap)};
-      row-gap: #{map.get($tabletGrid, rowGap)};
+      column-gap: var(--sp-lg);
+      row-gap: var(--sp-md);
       grid-template-areas: #{map.get($tabletGrid, templateAreas)};
     }
     @media all and ($mobile) {
       grid-template-columns: #{map.get($mobileGrid, templateColumns)};
       grid-template-rows: #{map.get($mobileGrid, templateRows)};
-      column-gap: #{map.get($mobileGrid, columnGap)};
-      row-gap: #{map.get($mobileGrid, rowGap)};
+      column-gap: var(--sp-md);
+      row-gap: var(--sp-sm);
       grid-template-areas: #{map.get($mobileGrid, templateAreas)};
     }
 
     @media all and not ($desktop) {
-      padding: 0 1rem;
+      padding: 0 var(--sp-md);
     }
     @media all and ($mobile) {
       margin: 0 auto;
     }
 
     & .sidebar {
-      gap: 1.2rem;
+      gap: var(--sp-lg);
       top: 0;
       box-sizing: border-box;
-      padding: $topSpacing 2rem 2rem 2rem;
+      padding: $topSpacing var(--sp-xl) var(--sp-xl) var(--sp-xl);
       display: flex;
       height: 100vh;
       position: sticky;
@@ -240,7 +312,7 @@ a {
         height: unset;
         flex-direction: row;
         padding: 0;
-        padding-top: 2rem;
+        padding-top: var(--sp-xl);
       }
     }
 
@@ -260,16 +332,17 @@ a {
         padding: 0;
         & > * {
           flex: 1;
-          max-height: 24rem;
+          max-height: var(--sp-3xl);
         }
         & > .toc {
           display: none;
         }
       }
     }
+
     & .page-header,
     & .page-footer {
-      margin-top: 1rem;
+      margin-top: var(--sp-md);
     }
 
     & .page-header {
@@ -309,23 +382,32 @@ a {
   }
 }
 
+// =============================================================================
+// FOOTNOTES
+// =============================================================================
+
 .footnotes {
-  margin-top: 2rem;
+  margin-top: var(--sp-2xl);
   border-top: 1px solid var(--lightgray);
+  font-size: var(--text-xs);
 }
+
+// =============================================================================
+// FORM ELEMENTS
+// =============================================================================
 
 input[type="checkbox"] {
   transform: translateY(2px);
   color: var(--secondary);
   border: 1px solid var(--lightgray);
-  border-radius: 3px;
+  border-radius: 0;
   background-color: var(--light);
   position: relative;
-  margin-inline-end: 0.2rem;
-  margin-inline-start: -1.4rem;
+  margin-inline-end: var(--sp-2xs);
+  margin-inline-start: -var(--sp-lg);
   appearance: none;
-  width: 16px;
-  height: 16px;
+  width: 1rem;
+  height: 1rem;
 
   &:checked {
     border-color: var(--secondary);
@@ -334,10 +416,10 @@ input[type="checkbox"] {
     &::after {
       content: "";
       position: absolute;
-      left: 4px;
+      left: var(--sp-2xs);
       top: 1px;
-      width: 4px;
-      height: 8px;
+      width: var(--sp-2xs);
+      height: var(--sp-xs);
       display: block;
       border: solid var(--light);
       border-width: 0 2px 2px 0;
@@ -346,12 +428,21 @@ input[type="checkbox"] {
   }
 }
 
+// =============================================================================
+// BLOCKQUOTE
+// =============================================================================
+
 blockquote {
-  margin: 1rem 0;
-  border-left: 3px solid var(--secondary);
-  padding-left: 1rem;
-  transition: border-color 0.2s ease;
+  margin: var(--sp-lg) 0;
+  border-left: var(--border-thick) solid var(--secondary);
+  padding-left: var(--sp-md);
+  transition: border-color var(--transition-base);
 }
+
+// =============================================================================
+// HEADINGS
+// φ sequence: each step × φ from previous.
+// =============================================================================
 
 h1,
 h2,
@@ -378,9 +469,9 @@ h4,
 h5,
 h6 {
   &[id] > a[href^="#"] {
-    margin: 0 0.5rem;
+    margin: 0 var(--sp-sm);
     opacity: 0;
-    transition: opacity 0.2s ease;
+    transition: opacity var(--transition-base);
     transform: translateY(-0.1rem);
     font-family: var(--codeFont);
     user-select: none;
@@ -395,47 +486,53 @@ h6 {
   }
 }
 
-// typography improvements
 h1 {
-  font-size: 1.75rem;
-  margin-top: 2.25rem;
-  margin-bottom: 1rem;
+  font-size: var(--text-2xl);    // 2.618rem — φ²
+  line-height: var(--lh-tight);
+  margin-top: var(--sp-2xl);     // 4.236rem — φ³
+  margin-bottom: var(--sp-lg);   // 1.618rem — φ¹
 }
 
 h2 {
-  font-size: 1.4rem;
-  margin-top: 1.9rem;
-  margin-bottom: 1rem;
+  font-size: var(--text-xl);     // 2.058rem — φ^1.5
+  line-height: var(--lh-tight);
+  margin-top: var(--sp-xl);      // 2.618rem — φ²
+  margin-bottom: var(--sp-md);   // 1rem     — φ⁰
 }
 
 h3 {
-  font-size: 1.12rem;
-  margin-top: 1.62rem;
-  margin-bottom: 1rem;
+  font-size: var(--text-lg);     // 1.618rem — φ¹
+  line-height: var(--lh-tight);
+  margin-top: var(--sp-xl);      // 2.618rem — φ²
+  margin-bottom: var(--sp-md);   // 1rem     — φ⁰
 }
 
 h4,
 h5,
 h6 {
-  font-size: 1rem;
-  margin-top: 1.5rem;
-  margin-bottom: 1rem;
+  font-size: var(--text-md);     // 1.272rem — φ^0.5
+  line-height: var(--lh-tight);
+  margin-top: var(--sp-lg);      // 1.618rem — φ¹
+  margin-bottom: var(--sp-sm);   // 0.618rem — φ⁻¹
 }
+
+// =============================================================================
+// CODE
+// =============================================================================
 
 figure[data-rehype-pretty-code-figure] {
   margin: 0;
   position: relative;
-  line-height: 1.6rem;
-  position: relative;
+  line-height: var(--lh-base);
 
   & > [data-rehype-pretty-code-title] {
     font-family: var(--codeFont);
-    font-size: 0.9rem;
-    padding: 0.1rem 0.5rem;
+    font-size: var(--text-xs);
+    padding: var(--sp-2xs) var(--sp-sm);
     border: 1px solid var(--lightgray);
     width: fit-content;
-    border-radius: 5px;
-    margin-bottom: -0.5rem;
+    border-radius: 0;
+    margin-bottom: calc(-1 * var(--sp-sm));
     color: var(--darkgray);
   }
 
@@ -446,8 +543,8 @@ figure[data-rehype-pretty-code-figure] {
 
 pre {
   font-family: var(--codeFont);
-  padding: 0 0.5rem;
-  border-radius: 5px;
+  padding: 0 var(--sp-sm);
+  border-radius: 0;
   overflow-x: auto;
   border: 1px solid var(--lightgray);
   position: relative;
@@ -459,33 +556,33 @@ pre {
   & > code {
     background: none;
     padding: 0;
-    font-size: 0.85rem;
+    font-size: var(--text-xs);
     counter-reset: line;
     counter-increment: line 0;
     display: grid;
-    padding: 0.5rem 0;
+    padding: var(--sp-sm) 0;
     overflow-x: auto;
 
     & [data-highlighted-chars] {
       background-color: var(--highlight);
-      border-radius: 5px;
+      border-radius: 0;
     }
 
     & > [data-line] {
-      padding: 0 0.25rem;
+      padding: 0 var(--sp-xs);
       box-sizing: border-box;
-      border-left: 3px solid transparent;
+      border-left: var(--border-thin) solid transparent;
 
       &[data-highlighted-line] {
         background-color: var(--highlight);
-        border-left: 3px solid var(--secondary);
+        border-left: var(--border-thin) solid var(--secondary);
       }
 
       &::before {
         content: counter(line);
         counter-increment: line;
-        width: 1rem;
-        margin-right: 1rem;
+        width: var(--sp-md);
+        margin-right: var(--sp-md);
         display: inline-block;
         text-align: right;
         color: rgba(115, 138, 148, 0.6);
@@ -493,11 +590,11 @@ pre {
     }
 
     &[data-line-numbers-max-digits="2"] > [data-line]::before {
-      width: 2rem;
+      width: var(--sp-xl);
     }
 
     &[data-line-numbers-max-digits="3"] > [data-line]::before {
-      width: 3rem;
+      width: var(--sp-2xl);
     }
   }
 }
@@ -506,44 +603,56 @@ code {
   font-size: 0.9em;
   color: var(--dark);
   font-family: var(--codeFont);
-  border-radius: 5px;
-  padding: 0.1rem 0.2rem;
+  border-radius: 0;
+  padding: var(--sp-2xs) var(--sp-xs);
   background: var(--lightgray);
 }
+
+// =============================================================================
+// PROSE RHYTHM
+// =============================================================================
 
 tbody,
 li,
 p {
-  line-height: 1.6rem;
+  line-height: var(--lh-base);
 }
+
+p {
+  max-width: var(--measure);
+}
+
+// =============================================================================
+// TABLES
+// =============================================================================
 
 .table-container {
   overflow-x: auto;
 
   & > table {
-    margin: 1rem;
-    padding: 1.5rem;
+    margin: var(--sp-md);
+    padding: var(--sp-lg);
     border-collapse: collapse;
 
     th,
     td {
-      min-width: 75px;
+      min-width: var(--sp-3xl);
     }
 
     & > * {
-      line-height: 2rem;
+      line-height: var(--lh-loose);
     }
   }
 }
 
 th {
   text-align: left;
-  padding: 0.4rem 0.7rem;
+  padding: var(--sp-xs) var(--sp-sm);
   border-bottom: 2px solid var(--gray);
 }
 
 td {
-  padding: 0.2rem 0.7rem;
+  padding: var(--sp-2xs) var(--sp-sm);
 }
 
 tr {
@@ -553,21 +662,25 @@ tr {
   }
 }
 
+// =============================================================================
+// MEDIA
+// =============================================================================
+
 img {
   max-width: 100%;
-  border-radius: 5px;
-  margin: 1rem 0;
+  border-radius: 0;
+  margin: var(--sp-lg) 0;
   content-visibility: auto;
 }
 
 p > img + em {
   display: block;
-  transform: translateY(-1rem);
+  transform: translateY(calc(-1 * var(--sp-md)));
 }
 
 hr {
   width: 100%;
-  margin: 2rem auto;
+  margin: var(--sp-2xl) auto;
   height: 1px;
   border: none;
   background-color: var(--lightgray);
@@ -576,8 +689,12 @@ hr {
 audio,
 video {
   width: 100%;
-  border-radius: 5px;
+  border-radius: 0;
 }
+
+// =============================================================================
+// UTILITIES
+// =============================================================================
 
 .spacer {
   flex: 2 1 auto;
@@ -595,23 +712,22 @@ ol.overflow {
   width: 100%;
   margin-bottom: 0;
 
-  // clearfix
   content: "";
   clear: both;
 
   & > li.overflow-end {
-    height: 0.5rem;
+    height: var(--sp-sm);
     margin: 0;
   }
 
   &.gradient-active {
-    mask-image: linear-gradient(to bottom, black calc(100% - 50px), transparent 100%);
+    mask-image: linear-gradient(to bottom, black calc(100% - var(--sp-2xl)), transparent 100%);
   }
 }
 
 .transclude {
   ul {
-    padding-left: 1rem;
+    padding-left: var(--sp-md);
   }
 }
 
@@ -626,16 +742,20 @@ iframe.pdf {
   aspect-ratio: 16 / 9;
   height: 100%;
   width: 100%;
-  border-radius: 5px;
+  border-radius: 0;
 }
+
+// =============================================================================
+// NAVIGATION PROGRESS
+// =============================================================================
 
 .navigation-progress {
   position: fixed;
   top: 0;
   left: 0;
   width: 0;
-  height: 3px;
+  height: var(--border-thick);   // 2.618px — φ²
   background: var(--secondary);
-  transition: width 0.2s ease;
+  transition: width var(--transition-fast);
   z-index: 9999;
 }
