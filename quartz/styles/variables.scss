@@ -1,58 +1,80 @@
 @use "sass:map";
+@use "sass:math";
 
-/**
- * Layout breakpoints
- * $mobile: screen width below this value will use mobile styles
- * $desktop: screen width above this value will use desktop styles
- * Screen width between $mobile and $desktop width will use the tablet layout.
- * assuming mobile < desktop
- */
+// Golden Ratio Constant
+$phi: 1.61803398875;
+
+// Helper Functions
+@function gold-major($total) { @return calc($total / #{$phi}); }
+@function gold-minor($total) { @return calc($total / (#{$phi} * #{$phi})); }
+
+// Helper: Calculate golden segments based on viewport height (vh)
+// $steps: how many times to divide by phi
+@function gold-vh($steps) {
+  $ratio: 1;
+  @for $i from 1 through $steps {
+    $ratio: $ratio * $phi;
+  }
+  @return calc(100vh / #{$ratio});
+}
+
 $breakpoints: (
   mobile: 800px,
   desktop: 1200px,
 );
 
-$mobile: "(max-width: #{map.get($breakpoints, mobile)})";
-$tablet: "(min-width: #{map.get($breakpoints, mobile)}) and (max-width: #{map.get($breakpoints, desktop)})";
+$mobile:  "(max-width: #{map.get($breakpoints, mobile)})";
+$tablet:  "(min-width: #{map.get($breakpoints, mobile)}) and (max-width: #{map.get($breakpoints, desktop)})";
 $desktop: "(min-width: #{map.get($breakpoints, desktop)})";
 
-$pageWidth: #{map.get($breakpoints, mobile)};
-$sidePanelWidth: 320px;
-$topSpacing: 4.618rem;  // φ² — was 6rem (arbitrary), now derived
+// Layout Calculations
+$pageWidth: map.get($breakpoints, mobile);
+// Sidebar is the 'Minor' segment of the mobile breakpoint (~305px)
+$sidePanelWidth: gold-minor($pageWidth); 
+
+// Modular Spacing
+$gap-xs: 0.382rem; // φ⁻²
+$gap-sm: 0.618rem; // φ⁻¹
+$gap-md: 1rem;     // φ⁰
+$topSpacing: gold-vh(5); // φ²
+
 $boldWeight: 700;
 $semiBoldWeight: 600;
 $normalWeight: 400;
 
 $mobileGrid: (
   templateRows: "auto auto auto auto auto",
-  templateColumns: "auto",
-  rowGap: "0.382rem",   // φ⁻²
-  columnGap: "0.382rem",
+  templateColumns: "1fr",
+  rowGap: $gap-xs,
+  columnGap: $gap-xs,
   templateAreas:
     '"grid-sidebar-left"\
-      "grid-header"\
-      "grid-center"\
-      "grid-sidebar-right"\
-      "grid-footer"',
+     "grid-header"\
+     "grid-center"\
+     "grid-sidebar-right"\
+     "grid-footer"',
 );
+
 $tabletGrid: (
   templateRows: "auto auto auto auto",
-  templateColumns: "#{$sidePanelWidth} auto",
-  rowGap: "0.618rem",   // φ⁻¹
-  columnGap: "1rem",    // φ⁰
+  templateColumns: "#{$sidePanelWidth} 1fr",
+  rowGap: $gap-sm,
+  columnGap: $gap-md,
   templateAreas:
     '"grid-sidebar-left grid-header"\
-      "grid-sidebar-left grid-center"\
-      "grid-sidebar-left grid-sidebar-right"\
-      "grid-sidebar-left grid-footer"',
+     "grid-sidebar-left grid-center"\
+     "grid-sidebar-left grid-sidebar-right"\
+     "grid-sidebar-left grid-footer"',
 );
+
 $desktopGrid: (
   templateRows: "auto auto auto",
-  templateColumns: "#{$sidePanelWidth} auto #{$sidePanelWidth}",
-  rowGap: "0.618rem",   // φ⁻¹
-  columnGap: "1rem",    // φ⁰ — was 5px, was overridden to 2.618rem; now honest
+  // Columns: Side (Minor) | Center (Major) | Side (Minor) 
+  templateColumns: "#{$sidePanelWidth} 1fr #{$sidePanelWidth}",
+  rowGap: $gap-sm,
+  columnGap: $gap-md,
   templateAreas:
     '"grid-sidebar-left grid-header grid-sidebar-right"\
-      "grid-sidebar-left grid-center grid-sidebar-right"\
-      "grid-sidebar-left grid-footer grid-sidebar-right"',
+     "grid-sidebar-left grid-center grid-sidebar-right"\
+     "grid-sidebar-left grid-footer grid-sidebar-right"',
 );

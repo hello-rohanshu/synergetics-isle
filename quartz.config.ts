@@ -25,8 +25,11 @@ const config: QuartzConfig = {
       typography: {
         header: "Literata",
         body: "Inter",
-        code: "IBM Plex Mono",
+        code: "Courier Prime",
+        title: "Abril Fatface",
       },
+      //Vollkorn, Syne Mono, Abril Fatface, Bebas Neue
+
       colors: {
         lightMode: {
           light: "#faf8f8",
