@@ -39,21 +39,21 @@ const config: QuartzConfig = {
           gray: "#b8b8b8",
           darkgray: "#4e4e4e",
           dark: "#2b2b2b",
-          secondary: "#8a6b3a",              // gold — links
-          tertiary: "#a07840",               // gold lightened — hover
-          highlight: "rgba(194, 154, 95, 0.08)",
-          textHighlight: "#fff8e7aa",
+          secondary: "#284b63",
+          tertiary: "#84a59d",
+          highlight: "rgba(143, 159, 169, 0.15)",
+          textHighlight: "#fff23688",
         },
         darkMode: {
-          light: "#0e0f12",
+          light: "#161618",
           lightgray: "#393639",
           gray: "#646464",
           darkgray: "#d4d4d4",
           dark: "#ebebec",
-          secondary: "#9a7b4a",              // gold lifted for dark bg
-          tertiary: "#b08d5a",               // gold lightened — hover
-          highlight: "rgba(194, 154, 95, 0.10)",
-          textHighlight: "#fff8e755",
+          secondary: "#7b97aa",
+          tertiary: "#84a59d",
+          highlight: "rgba(143, 159, 169, 0.15)",
+          textHighlight: "#b3aa0288",
         },
       },
     },
