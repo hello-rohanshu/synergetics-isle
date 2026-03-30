@@ -66,7 +66,8 @@ html {
   scroll-behavior: smooth;
   text-size-adjust: none;
   overflow-x: hidden;
-  width: 100vw;
+  //width: 100vw;
+  //width: 100%;
 
   @media all and ($mobile) {
     scroll-padding-top: var(--sp-2xl);
@@ -249,7 +250,7 @@ a {
 
   & article {
     &>h1 {
-      font-size: var(--text-2xl);
+      font-size: var(--text-xl);
     }
 
     & li:has(> input[type="checkbox"]) {
@@ -277,14 +278,14 @@ a {
     display: grid;
     grid-template-columns: #{map.get($desktopGrid, templateColumns)};
     grid-template-rows: #{map.get($desktopGrid, templateRows)};
-    column-gap: var(--sp-md);
+    column-gap: var(--sp-xs);
     row-gap: var(--sp-lg);
     grid-template-areas: #{map.get($desktopGrid, templateAreas)};
 
     @media all and ($tablet) {
       grid-template-columns: #{map.get($tabletGrid, templateColumns)};
       grid-template-rows: #{map.get($tabletGrid, templateRows)};
-      column-gap: var(--sp-lg);
+      column-gap: var(--sp-xs);
       row-gap: var(--sp-md);
       grid-template-areas: #{map.get($tabletGrid, templateAreas)};
     }
