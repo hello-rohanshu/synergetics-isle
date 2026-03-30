@@ -19,22 +19,22 @@
 
 // font-size: 3.236rem, 2.618rem;
 
-.page-title a::after {
-    content: "R. Buckminster Fuller";
-    display: block;
-    font-family: var(--titleFont);
-    font-size: calc(1.618rem / var(--phi));
-    letter-spacing: var(--sp-3xs);
-    opacity: 1; /* Changed to hide by default */
-    text-align-last: justify;
-    margin-top: -0.382rem;
-    color: #C29A5F;
-    transition: opacity 0.3s ease; /* Optional: smooths the appearance */
+// .page-title a::after {
+//     content: "R. Buckminster Fuller";
+//     display: block;
+//     font-family: var(--titleFont);
+//     font-size: calc(1.618rem / var(--phi));
+//     letter-spacing: var(--sp-3xs);
+//     opacity: 1; /* Changed to hide by default */
+//     text-align-last: justify;
+//     margin-top: -0.382rem;
+//     color: #C29A5F;
+//     transition: opacity 0.3s ease; /* Optional: smooths the appearance */
 
-    @media all and not ($desktop) {
-        display: none;
-    }
-}
+//     @media all and not ($desktop) {
+//         display: none;
+//     }
+// }
 
 // .article-title {
 //   font-size: var(--text-2xl) !important; // 2.618rem

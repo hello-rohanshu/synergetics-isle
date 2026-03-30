@@ -278,14 +278,14 @@ a {
     display: grid;
     grid-template-columns: #{map.get($desktopGrid, templateColumns)};
     grid-template-rows: #{map.get($desktopGrid, templateRows)};
-    column-gap: var(--sp-xs);
+    column-gap: 0;
     row-gap: var(--sp-lg);
     grid-template-areas: #{map.get($desktopGrid, templateAreas)};
 
     @media all and ($tablet) {
       grid-template-columns: #{map.get($tabletGrid, templateColumns)};
       grid-template-rows: #{map.get($tabletGrid, templateRows)};
-      column-gap: var(--sp-xs);
+      column-gap: 0;
       row-gap: var(--sp-md);
       grid-template-areas: #{map.get($tabletGrid, templateAreas)};
     }
@@ -715,7 +715,7 @@ p>img+em {
 
 hr {
   width: 100%;
-  margin: var(--sp-2xl) auto;
+  margin: var(--sp-lg) auto;
   height: 1px;
   border: none;
   background-color: var(--lightgray);
