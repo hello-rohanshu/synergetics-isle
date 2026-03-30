@@ -18,6 +18,8 @@
   --phi-sm: 0.382;
 
   // Spacing scale
+  --sp-4xs: 0.090rem;
+  --sp-3xs: 0.146rem;
   --sp-2xs: 0.236rem;
   --sp-xs: 0.382rem;
   --sp-sm: 0.618rem;
@@ -299,6 +301,11 @@ a {
       padding: 0 var(--sp-md);
     }
 
+    @media all and ($tablet) {
+      padding-right: var(--sp-xl);
+      padding-left: 0;
+    }
+
     @media all and ($mobile) {
       margin: 0 auto;
     }
@@ -307,7 +314,7 @@ a {
       gap: var(--sp-lg);
       top: 0;
       box-sizing: border-box;
-      padding: $topSpacing var(--sp-lg) var(--sp-xl) var(--sp-lg);
+      padding: $topSpacing var(--sp-xl) var(--sp-xl) var(--sp-xl);
       display: flex;
       height: 100vh;
       position: sticky;
@@ -335,11 +342,6 @@ a {
       margin-right: 0;
       flex-direction: column;
 
-      @media all and ($mobile) {
-        margin-left: inherit;
-        margin-right: inherit;
-      }
-
       @media all and not ($desktop) {
         position: initial;
         height: unset;
@@ -349,12 +351,20 @@ a {
 
         &>* {
           flex: 1;
-          max-height: var(--sp-3xl);
+          max-height: 24rem;
         }
 
         &>.toc {
           display: none;
         }
+      }
+
+      @media all and ($mobile) {
+        position: initial; // explicit repeat
+        height: unset; // explicit repeat
+        padding: 0; // explicit repeat
+        margin-left: inherit;
+        margin-right: inherit;
       }
     }
 
@@ -396,6 +406,7 @@ a {
         margin-right: 0;
         margin-left: 0;
       }
+
     }
 
     & footer {

@@ -23,12 +23,14 @@ const config: QuartzConfig = {
       fontOrigin: "googleFonts",
       cdnCaching: true,
       typography: {
+        title: "Bebas Neue", //need to edit this in Head.tsx and Custom.scss too for it to work for weights other than 400 or whatever is default for the font. Weight fetch is controlled in Head.tsx while applying it is controlled in Custom.scss
+
+        // For items other than title, you can edit weights by first adding them as array like body: {name: "Inter", weight: "900"} which will fetch 900. Then you apply it via targetting html elements in sustom.scss.
         header: "Literata",
-        body: "Inter",
+        body: { name: "Inter" },
         code: "Courier Prime",
-        title: "Abril Fatface",
       },
-      //Vollkorn, Syne Mono, Abril Fatface, Bebas Neue
+      //Vollkorn, Bebas Neue, Bebas Neue
 
       colors: {
         lightMode: {
@@ -37,21 +39,21 @@ const config: QuartzConfig = {
           gray: "#b8b8b8",
           darkgray: "#4e4e4e",
           dark: "#2b2b2b",
-          secondary: "#284b63",
-          tertiary: "#84a59d",
-          highlight: "rgba(143, 159, 169, 0.15)",
-          textHighlight: "#fff23688",
+          secondary: "#8a6b3a",              // gold — links
+          tertiary: "#a07840",               // gold lightened — hover
+          highlight: "rgba(194, 154, 95, 0.08)",
+          textHighlight: "#fff8e7aa",
         },
         darkMode: {
-          light: "#161618",
+          light: "#0e0f12",
           lightgray: "#393639",
           gray: "#646464",
           darkgray: "#d4d4d4",
           dark: "#ebebec",
-          secondary: "#7b97aa",
-          tertiary: "#84a59d",
-          highlight: "rgba(143, 159, 169, 0.15)",
-          textHighlight: "#b3aa0288",
+          secondary: "#9a7b4a",              // gold lifted for dark bg
+          tertiary: "#b08d5a",               // gold lightened — hover
+          highlight: "rgba(194, 154, 95, 0.10)",
+          textHighlight: "#fff8e755",
         },
       },
     },

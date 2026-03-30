@@ -70,7 +70,7 @@ $tabletGrid: (
 $desktopGrid: (
   templateRows: "auto auto auto",
   // Columns: Side (Minor) | Center (Major) | Side (Minor) 
-  templateColumns: "#{$sidePanelWidth} 1fr #{$sidePanelWidth}",
+  templateColumns: "1fr 2.058fr 1fr",
   rowGap: $gap-sm,
   columnGap: $gap-md,
   templateAreas:
@@ -78,3 +78,4 @@ $desktopGrid: (
      "grid-sidebar-left grid-center grid-sidebar-right"\
      "grid-sidebar-left grid-footer grid-sidebar-right"',
 );
+

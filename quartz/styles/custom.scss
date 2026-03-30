@@ -3,31 +3,67 @@
 
 // put your custom CSS here!
 
-.page-title {
+// ──── TYPOGRAPHY ───────────────────────────────────────────────
+.page-title a {
+    font-family: "Bebas Neue", sans-serif;
     font-size: 2.618rem;
-    font-weight: 900;
-    letter-spacing: 1px;
+    font-weight: 700;
+    display: inline-block;
+    line-height: 1;
+    color: #6D0015; //color of the original synergetics 1 book
 }
 
-.page-title::after {
-    content: "Alpha";
+[saved-theme="dark"] .page-title a {
+    color: #982117; //color of second synergetics volume #F62427 x 0.618
+}
+
+// font-size: 3.236rem, 2.618rem;
+
+.page-title a::after {
+    content: "R. Buckminster Fuller";
     display: block;
-    font-size: 0.75rem;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    background: var(--lightgray);
-    color: var(--gray);
-    padding: 0.2em 0.6em;
-    border-radius: 3px;
-    margin-top: 0.382rem;
-    width: fit-content;
+    font-family: var(--titleFont);
+    font-size: calc(1.618rem / var(--phi));
+    letter-spacing: var(--sp-3xs);
+    opacity: 1; /* Changed to hide by default */
+    text-align-last: justify;
+    margin-top: -0.382rem;
+    color: #C29A5F;
+    transition: opacity 0.3s ease; /* Optional: smooths the appearance */
+
+    @media all and not ($desktop) {
+        display: none;
+    }
 }
 
-@media screen and (max-width: 768px) {
-  .page-subtitle {
-    display: none;
-  }
+// .page-title a:hover::after {
+//     opacity: 1; /* Shows when the link is hovered */
+// }
+
+// .page-title::before {
+//     content: "Alpha";
+//     display: block;
+//     font-size: 0.75rem;
+//     letter-spacing: 0.15em;
+//     text-transform: uppercase;
+//     background: var(--lightgray);
+//     color: var(--gray);
+//     padding: 0.2em 0.6em;
+//     border-radius: 3px;
+//     width: fit-content;
+//     margin-bottom: var(--sp-3xs);
+// }
+
+
+
+
+#quartz-body a.folder-title {
+    font-size: 1rem;
 }
+
+// p, li {
+//   font-weight: 900;
+// }
 
 
 
@@ -48,11 +84,11 @@
 }
 
 @media all and ($mobile) {
-  #quartz-body > div.left.sidebar > div.flex-component {
-    margin-right: 0.5rem;
-    gap: 0.5rem;
-    padding: 0 0.25rem;
-  }
+    #quartz-body>div.left.sidebar>div.flex-component {
+        margin-right: 0.5rem;
+        gap: 0.5rem;
+        padding: 0 0.25rem;
+    }
 }
 
 // ── Scrollbar — φ-derived minimal ────────────────────────────────────────────

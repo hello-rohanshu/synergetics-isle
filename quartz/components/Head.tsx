@@ -48,6 +48,7 @@ export default (() => {
             {cfg.theme.typography.title && (
               <link rel="stylesheet" href={googleFontSubsetHref(cfg.theme, cfg.pageTitle)} />
             )}
+            <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas Neue:wght@400;700&display=swap" />
           </>
         )}
         <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossOrigin="anonymous" />
