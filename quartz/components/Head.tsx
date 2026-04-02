@@ -48,7 +48,7 @@ export default (() => {
             {cfg.theme.typography.title && (
               <link rel="stylesheet" href={googleFontSubsetHref(cfg.theme, cfg.pageTitle)} />
             )}
-            <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas Neue:wght@400;700&display=swap" />
+            {/* <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas Neue:wght@400;700&display=swap" /> */}
           </>
         )}
         <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossOrigin="anonymous" />
@@ -84,6 +84,9 @@ export default (() => {
         )}
 
         <link rel="icon" href={iconPath} />
+        <link rel="preload" href={`${baseDir}/static/fonts/inter-v20-latin-regular.woff2`} as="font" type="font/woff2" crossOrigin="anonymous" />
+        <link rel="preload" href={`${baseDir}/static/fonts/literata-v40-latin-600.woff2`} as="font" type="font/woff2" crossOrigin="anonymous" />
+        <link rel="preload" href={`${baseDir}/static/fonts/bebas-neue-v16-latin-regular.woff2`} as="font" type="font/woff2" crossOrigin="anonymous" />
         <meta name="description" content={description} />
         <meta name="generator" content="Quartz" />
 

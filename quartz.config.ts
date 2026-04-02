@@ -20,8 +20,8 @@ const config: QuartzConfig = {
     ignorePatterns: ["private", "templates", ".obsidian", "_site/**"],
     defaultDateType: "modified",
     theme: {
-      fontOrigin: "googleFonts",
-      cdnCaching: true,
+      fontOrigin: "local",
+      cdnCaching: false,
       typography: {
         title: "Bebas Neue", //need to edit this in Head.tsx and Custom.scss too for it to work for weights other than 400 or whatever is default for the font. Weight fetch is controlled in Head.tsx while applying it is controlled in Custom.scss
 

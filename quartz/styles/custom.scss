@@ -3,15 +3,94 @@
 
 // put your custom CSS here!
 
+
+// ============================================================
+// LOCAL FONTS (@font-face declarations)
+// Font files served from /static/fonts/
+// ============================================================
+
+// Inter - Body
+@font-face {
+    font-family: 'Inter';
+    src: url('/static/fonts/inter-v20-latin-regular.woff2') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Inter';
+    src: url('/static/fonts/inter-v20-latin-italic.woff2') format('woff2');
+    font-weight: 400;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Inter';
+    src: url('/static/fonts/inter-v20-latin-600.woff2') format('woff2');
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Inter';
+    src: url('/static/fonts/inter-v20-latin-600italic.woff2') format('woff2');
+    font-weight: 600;
+    font-style: italic;
+    font-display: swap;
+}
+
+// Literata - Headings
+@font-face {
+    font-family: 'Literata';
+    src: url('/static/fonts/literata-v40-latin-700.woff2') format('woff2');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+
+// Bebas Neue - Site title
+@font-face {
+    font-family: 'Bebas Neue';
+    src: url('/static/fonts/bebas-neue-v16-latin-regular.woff2') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+// Courier Prime - Code
+@font-face {
+    font-family: 'Courier Prime';
+    src: url('/static/fonts/courier-prime-v11-latin-regular.woff2') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+// ============================================================
+
+
 // ──── TYPOGRAPHY ───────────────────────────────────────────────
 .page-title a {
     font-family: "Bebas Neue", sans-serif;
     font-size: 2.618rem;
-    font-weight: 700;
+    //font-weight: 700;
     display: inline-block;
     line-height: 1;
     //color: #6D0015; //color of the original synergetics 1 book
 }
+
+// #quartz-body h1 {
+//     font-size: calc(var(--text-sm) + var(--text-base));
+// }
+
+// #quartz-body h1.article-title {
+//     font-size: var(--text-xl);
+// }
+
+
 
 // [saved-theme="dark"] .page-title a {
 //     color: #982117; //color of second synergetics volume #F62427 x 0.618
@@ -62,7 +141,7 @@
 
 
 #quartz-body a.folder-title {
-    font-size: 1rem;
+    font-size: 1.05rem;
 }
 
 // p, li {
@@ -135,8 +214,15 @@ html {
     scrollbar-color: rgba(128, 128, 128, 0.382) transparent;
 }
 
+// ---------------------------------------------------------------------
+
+
+
+// ---------------------------------------------------------------------
 // Prevent Quartz's inner wrapper from stealing scroll away from viewport edge
 #quartz-body,
 .page {
     overflow: visible !important;
 }
+
+// ---------------------------------------------------------------------------
