@@ -484,7 +484,11 @@ if (!outputEl || !sendBtn) return;
     });
   }
 
-document.addEventListener("nav", () => tryInit());
+document.addEventListener("nav", () => {
+  const inputEl = document.getElementById("chat-input");
+  if (inputEl) inputEl._bound = false;
+  tryInit();
+});
 tryInit();
 })();
 `
