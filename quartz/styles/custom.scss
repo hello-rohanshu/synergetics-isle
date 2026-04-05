@@ -82,13 +82,21 @@
 
 
 // ──── TYPOGRAPHY ───────────────────────────────────────────────
-.page-title a {
-    //font-family: "Abril Fatface", sans-serif;
-    font-size: calc(var(--text-lg) + var(--text-xs)); // 1.618 + 0.618 = 2.236rem = φ^√5
-    //font-weight: 700;
-    display: inline-block;
-    line-height: 1;
-    //color: #6D0015; //color of the original synergetics 1 book
+// .page-title a {
+//     //font-family: "Abril Fatface", sans-serif;
+//     //font-size: calc(var(--text-lg) + var(--text-xs)); // 1.618 + 0.618 = 2.236rem = φ^√5
+//     //font-size: 1.732rem; // root 4
+//     //font-weight: 700;
+//     display: inline-block;
+//     line-height: 1;
+//     //color: #6D0015; //color of the original synergetics 1 book
+// }
+
+// on mobile, this font was rearranging the layout, so restricting it to desktop
+@media all and ($desktop) {
+  .page-title a {
+    font-size: 2.236rem;
+  }
 }
 
 // font-size: 3.236rem, 2.618rem, 2.058rem;
