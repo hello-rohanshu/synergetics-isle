@@ -305,6 +305,15 @@ html {
   margin-bottom: -2px;
 }
 
+// trying to fix the button retaining focus on a mobile even AFTER being tapped
+.ai-button:focus:not(:focus-visible) {
+  outline: none;
+}
+
+.ai-button:active {
+  color: inherit;
+}
+
 // Darkmode + readermode: proper flex centering instead of absolute positioning
 .readermode,
 .darkmode {
