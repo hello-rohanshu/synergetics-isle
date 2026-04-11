@@ -305,6 +305,10 @@ html {
   margin-bottom: -2px;
 }
 
+.feedback-button {
+  transform: translateY(4px); /* Nudge it up or down */
+}
+
 // trying to fix the ai button and site title retaining focus on a mobile even AFTER being tapped
 * {
   -webkit-tap-highlight-color: transparent;
