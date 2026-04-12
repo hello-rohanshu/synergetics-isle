@@ -8,7 +8,7 @@ import * as Plugin from "./quartz/plugins"
  */
 const config: QuartzConfig = {
   configuration: {
-    pageTitle: "Synergetics",
+    pageTitle: "SYNERGETICS",
     pageTitleSuffix: "",
     enableSPA: true,
     enablePopovers: true,
@@ -16,22 +16,18 @@ const config: QuartzConfig = {
       provider: "plausible",
     },
     locale: "en-US",
-    baseUrl: "synergetics.pages.dev",
-    ignorePatterns: ["private", "templates", ".obsidian", "_site/**"],
+    baseUrl: "quartz.jzhao.xyz",
+    ignorePatterns: ["private", "templates", ".obsidian"],
     defaultDateType: "modified",
     theme: {
-      fontOrigin: "local",
-      cdnCaching: false,
+      fontOrigin: "googleFonts",
+      cdnCaching: true,
       typography: {
-        title: "Abril Fatface", //need to edit this in Head.tsx and Custom.scss too for it to work for weights other than 400 or whatever is default for the font. Weight fetch is controlled in Head.tsx while applying it is controlled in Custom.scss
-
-        // For items other than title, you can edit weights by first adding them as array like body: {name: "Inter", weight: "900"} which will fetch 900. Then you apply it via targetting html elements in sustom.scss.
-        header: "Literata",
-        body: { name: "Inter" },
+        header: "Inter",
+        body: "Literata",
         code: "Courier Prime",
+        title: "Bebas Neue"
       },
-      //Vollkorn, Bebas Neue, Bebas Neue
-
       colors: {
         lightMode: {
           light: "#faf8f8",
@@ -60,7 +56,6 @@ const config: QuartzConfig = {
   },
   plugins: {
     transformers: [
-      Plugin.HardLineBreaks(),
       Plugin.FrontMatter(),
       Plugin.CreatedModifiedDate({
         priority: ["frontmatter", "git", "filesystem"],
