@@ -8,7 +8,7 @@ import * as Plugin from "./quartz/plugins"
  */
 const config: QuartzConfig = {
   configuration: {
-    pageTitle: "Synergetics",
+    pageTitle: "synergetics",
     pageTitleSuffix: "",
     enableSPA: true,
     enablePopovers: true,
@@ -23,12 +23,12 @@ const config: QuartzConfig = {
       fontOrigin: "local",
       cdnCaching: false,
       typography: {
-        title: "Abril Fatface", //need to edit this in Head.tsx and Custom.scss too for it to work for weights other than 400 or whatever is default for the font. Weight fetch is controlled in Head.tsx while applying it is controlled in Custom.scss
+        title: "Ubuntu Sans", //need to edit this in Head.tsx and Custom.scss too for it to work for weights other than 400 or whatever is default for the font. Weight fetch is controlled in Head.tsx while applying it is controlled in Custom.scss
 
         // For items other than title, you can edit weights by first adding them as array like body: {name: "Inter", weight: "900"} which will fetch 900. Then you apply it via targetting html elements in sustom.scss.
         header: "Literata",
         body: { name: "Inter" },
-        code: "Courier Prime",
+        code: "JetBrains Mono",
       },
       //Vollkorn, Bebas Neue, Bebas Neue
 
