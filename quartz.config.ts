@@ -8,7 +8,7 @@ import * as Plugin from "./quartz/plugins"
  */
 const config: QuartzConfig = {
   configuration: {
-    pageTitle: "SYNERGETICS",
+    pageTitle: "synergetics",
     pageTitleSuffix: "",
     enableSPA: true,
     enablePopovers: true,
@@ -23,10 +23,10 @@ const config: QuartzConfig = {
       fontOrigin: "googleFonts",
       cdnCaching: true,
       typography: {
-        header: "Inter",
-        body: "Literata",
-        code: "Courier Prime",
-        title: "Bebas Neue"
+        header: "Literata",
+        body: "Inter",
+        code: "JetBrains Mono",
+        title: "Ubuntu"
       },
       colors: {
         lightMode: {

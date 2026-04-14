@@ -98,12 +98,10 @@
         font-size: 2.618rem;
     }
 }
-    .page-title a {
-        letter-spacing: 2px;
-    }
 
 .page-title a {
     font-weight: 700;
+    letter-spacing: -1.618px;
     //-webkit-text-stroke: 1px currentColor;
     //paint-order: stroke fill;
 }
@@ -286,59 +284,60 @@ html {
 // -------------------------------------------------------------------------
 
 .flex-component {
-  display: flex;
-  align-items: center;
+    display: flex;
+    align-items: center;
 }
 
 // Search: hide text label on mobile, keep icon only
 @media all and ($mobile) {
-  .search .search-button > p {
-    display: none;
-  }
-
-  .search .search-button {
-    padding: 0;
-    width: 2rem;
-    border: none;
-    margin-right: -4px;
-    margin-bottom: -2px;
-  }
-
-  .search-button svg .search-path {
-    path, circle {
-      stroke-width: 2px;
+    .search .search-button>p {
+        display: none;
     }
-  }
+
+    .search .search-button {
+        padding: 0;
+        width: 2rem;
+        border: none;
+        margin-right: -4px;
+        margin-bottom: -2px;
+    }
+
+    .search-button svg .search-path {
+
+        path,
+        circle {
+            stroke-width: 2px;
+        }
+    }
 }
 
 // AI pill: center text
 .ai-button .ai-pill {
-  text-indent: 0.08em;
-  margin-bottom: -2px;
+    text-indent: 0.08em;
+    margin-bottom: -2px;
 }
 
 // trying to fix the ai button and site title retaining focus on a mobile even AFTER being tapped
 * {
-  -webkit-tap-highlight-color: transparent;
+    -webkit-tap-highlight-color: transparent;
 }
 
 .ai-button:active {
-  color: inherit;
+    color: inherit;
 }
 
 // Darkmode + readermode: proper flex centering instead of absolute positioning
 .readermode,
 .darkmode {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
-  & svg {
-    position: static;
-    top: unset;
-  }
+    & svg {
+        position: static;
+        top: unset;
+    }
 }
 
 // -------------------------------------------------------------------------
 // -------------------------------------------------------------------------
-
