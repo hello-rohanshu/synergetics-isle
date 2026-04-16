@@ -29,7 +29,10 @@ const config: QuartzConfig = {
         },
         body: "Inter",
         code: "JetBrains Mono",
-        title: "Ubuntu"
+        title: {
+          name: "Ubuntu Sans",
+          weights: [100, 200, 300, 400, 500, 600, 700],
+        },
       },
       colors: {
         lightMode: {
