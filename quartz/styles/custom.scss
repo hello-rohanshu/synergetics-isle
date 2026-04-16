@@ -120,9 +120,7 @@
 //     // font-size: var(--text-lg);
 // }
 
-#quartz-body h1.article-title {
-    font-size: var(--text-xl);
-}
+
 
 
 
@@ -173,10 +171,7 @@
 
 
 
-// Adjusting Literta to be as big as Inter for the same on-paper font size
-#quartz-body a.folder-title {
-    font-size: 1.05rem;
-}
+
 
 // p, li {
 //   font-weight: 900;
@@ -266,17 +261,29 @@ html {
 //   font-size: 1.000rem; /* √1 */
 // }
 
-// #quartz-body h1,
-// #quartz-body h2,
-// #quartz-body h3,
-// #quartz-body h4,
-// #quartz-body h5,
-// #quartz-body h6 {
-//     font-weight: 400;
+#quartz-body h1.article-title {
+    font-size: var(--text-xl);
+    font-weight: 600;
+}
+
+#quartz-body h1,
+#quartz-body h2,
+#quartz-body h3,
+#quartz-body h4,
+#quartz-body h5,
+#quartz-body h6 {
+    font-weight: 600;
+}
+
+// #quartz-body h5{
+//     font-weight: 700;
 // }
 
-
-
+// Adjusting Literta to be as big as Inter for the same on-paper font size
+#quartz-body a.folder-title {
+    font-size: 1.05rem;
+    font-weight: 600;
+}
 
 
 // -------------------------------------------------------------------------

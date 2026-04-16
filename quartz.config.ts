@@ -23,7 +23,10 @@ const config: QuartzConfig = {
       fontOrigin: "googleFonts",
       cdnCaching: true,
       typography: {
-        header: "Literata",
+        header: {
+          name: "Literata",
+          weights: [100, 200, 300, 400, 500, 600, 700],
+        },
         body: "Inter",
         code: "JetBrains Mono",
         title: "Ubuntu"
