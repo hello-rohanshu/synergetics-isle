@@ -2,7 +2,7 @@
 title: Home
 ---
 
-The website, including this page, is still very much in-the-making. I wrote this up because an empty home page was getting cumbersome lol.
+The website, including this page, is still very much in-the-making. I wrote this up because an empty home page was getting cumbersome.
 
 <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:1.5rem 0">
   <img src="https://i0.wp.com/www.raptisrarebooks.com/wp-content/uploads/2021/05/rrb-124974.jpg?fit=1000%2C800&ssl=1" style="width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:4px">
@@ -27,6 +27,8 @@ Future:
 - **Community** — comments sections, Discord server for better discussions, etc.
 
 
+<br></br>
+
 # Check Site Health
 
 <a href="/systems-stack" style="display: inline-block; background: var(--secondary); color: var(--light); padding: 8px 20px; border-radius: 6px; text-decoration: none; font-weight: 500;">
@@ -34,7 +36,11 @@ Future:
 </a>
 
 
----
+
+
+
+<br></br>
+
 # Interactive Diagram Sample
 ![[Fig. 100.103 (New)]]
 
