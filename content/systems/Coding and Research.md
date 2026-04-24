@@ -1,8 +1,12 @@
 ---
 status: active
-attestation:
+attestation: 2026-04-23
 ping_url:
-url: https://claude.ai
+url:
 children:
   - "[[Claude]]"
+  - "[[Google AI Studio]]"
+  - "[[ChatGPT]]"
+  - "[[DeepSeek]]"
+  - "[[Gemini]]"
 ---

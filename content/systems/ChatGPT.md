@@ -2,7 +2,7 @@
 attestation:
 status:
 ping_url:
-url:
+url: https://chatgpt.com/
 children:
 alternatives:
 critical:

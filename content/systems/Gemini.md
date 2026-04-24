@@ -2,7 +2,7 @@
 attestation:
 status:
 ping_url:
-url:
+url: https://gemini.google.com/
 children:
 alternatives:
 critical:

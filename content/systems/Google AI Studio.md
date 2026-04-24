@@ -2,9 +2,6 @@
 attestation:
 status:
 ping_url:
-url:
+url: https://aistudio.google.com/
 children:
-alternatives:
-critical:
-retired:
 ---

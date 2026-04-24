@@ -2,9 +2,6 @@
 attestation:
 status:
 ping_url:
-url:
+url: https://www.deepseek.com/favicon.ico
 children:
-alternatives:
-critical:
-retired:
 ---
