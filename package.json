@@ -13,7 +13,7 @@
   },
   "scripts": {
     "build": "npx quartz build",
-    "prebuild": "node scripts/vault-audit.cjs",
+    "prebuild": "node scripts/frontmatter-audit.cjs",
     "serve": "npx quartz build --serve",
     "quartz": "./quartz/bootstrap-cli.mjs",
     "docs": "npx quartz build --serve -d docs",

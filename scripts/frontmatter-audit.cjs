@@ -1,15 +1,15 @@
 /**
- * vault-audit.js
+ * frontmatter-audit.js
  * 
  * Scans the Quartz content directory, reads YAML frontmatter from every
  * markdown file belonging to a configured group, computes checkbox
  * completion percentages for known boolean properties, and writes a
- * JSON report to static/vault-audit.json.
+ * JSON report to static/frontmatter-audit.json.
  * 
  * Dependencies: Node.js built-ins + gray-matter (no other packages).
  * 
  * Usage (add to package.json scripts):
- *   "prebuild": "node scripts/vault-audit.js"
+ *   "prebuild": "node scripts/frontmatter-audit.js"
  */
 
 const fs = require('fs');
@@ -21,7 +21,7 @@ const grayMatter = require('gray-matter');
 // ------------------------------------------------------------------
 const CONFIG = {
   contentDir: "content",
-  outputFile: "quartz/static/data/vault-audit.json",
+  outputFile: "quartz/static/data/frontmatter-audit.json",
   booleanProps: [
     "m-replication", "m-headings", "m-emDash", "m-italics",
     "m-images", "m-links", "m-equations", "m-links-2",

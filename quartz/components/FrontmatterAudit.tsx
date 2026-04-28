@@ -1,5 +1,5 @@
-// quartz/components/VaultAudit.tsx
-import vaultAudit from "../../quartz/static/data/vault-audit.json"
+// quartz/components/FrontmatterAudit.tsx
+import vaultAudit from "../../quartz/static/data/frontmatter-audit.json"
 import { QuartzComponent, QuartzComponentConstructor, QuartzComponentProps } from "./types"
 
 interface AuditEntry { [key: string]: number }
@@ -12,8 +12,8 @@ interface AuditData {
 
 const data = vaultAudit as AuditData
 
-const VaultAudit: QuartzComponent = ({ fileData }: QuartzComponentProps) => {
-  if (fileData.slug !== "synergetics-verification") return <></>
+const FrontmatterAudit: QuartzComponent = ({ fileData }: QuartzComponentProps) => {
+ //if (fileData.slug !== "frontmatter-audit") return <></>
 
   const properties = Object.entries(data.vault)
     .map(([name, value]) => ({ name, pct: Math.round(value) }))
@@ -104,7 +104,7 @@ const VaultAudit: QuartzComponent = ({ fileData }: QuartzComponentProps) => {
 
       <div class="audit-header">
         <div class="audit-title-group">
-          <h3>Vault Integrity</h3>
+          <h3>Frontmatter Audit</h3>
           <span class="audit-meta">Analyzed on {data.generated}</span>
         </div>
         <div class="audit-badge">{vaultPct}% Complete</div>
@@ -133,4 +133,4 @@ const VaultAudit: QuartzComponent = ({ fileData }: QuartzComponentProps) => {
   )
 }
 
-export default (() => VaultAudit) satisfies QuartzComponentConstructor
+export default (() => FrontmatterAudit) satisfies QuartzComponentConstructor

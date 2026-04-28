@@ -1,3 +1,0 @@
----
-title: Synergetics Proofreading Audit
----

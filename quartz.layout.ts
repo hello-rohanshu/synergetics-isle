@@ -4,7 +4,7 @@ import * as Component from "./quartz/components"
 const explorerConfig = {
   // Hide from explorer
   filterFn: (node: any) => {
-    const hidden = new Set(["systems", "synergetics-ai", "systems-stack"]);
+    const hidden = new Set(["systems", "synergetics-ai", "systems-stack", "frontmatter-audit"]);
     const slug = node.data?.slug ?? "";
     const name = (node.path || node.displayName || "").toLowerCase();
     return !hidden.has(slug) && !hidden.has(name);
@@ -57,8 +57,8 @@ export const sharedPageComponents: SharedLayout = {
       condition: (page) => page.fileData.slug === "synergetics-ai",
     }),
     Component.ConditionalRender({
-      component: Component.VaultAudit(),
-      condition: (page) => page.fileData.slug === "synergetics-verification",
+      component: Component.FrontmatterAudit(),
+      condition: (page) => page.fileData.slug === "frontmatter-audit",
     }),
   ],
   footer: Component.Footer({

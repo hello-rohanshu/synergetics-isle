@@ -26,7 +26,7 @@ import ConditionalRender from "./ConditionalRender"
 import SynergeticsAI from "./SynergeticsAI"
 import AIButton from "./AIButton"
 import SystemsDashboard from "./SystemsDashboard"
-import VaultAudit from "./VaultAudit"
+import FrontmatterAudit from "./FrontmatterAudit"
 
 export {
   ArticleTitle,
@@ -57,5 +57,5 @@ export {
   SynergeticsAI,
   AIButton,
   SystemsDashboard,
-  VaultAudit,
+  FrontmatterAudit,
 }
