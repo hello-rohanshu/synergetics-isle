@@ -708,12 +708,48 @@ SystemsDashboard.css = `
 
 .si-item-right { display: flex; flex-shrink: 0; align-items: center; gap: 6px; }
 
-.si-ping-wrap { display: flex; align-items: center; justify-content: center; width: 12px; height: 12px; }
-.si-pdot {
-  width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0;
-  background: transparent; cursor: default;
-  transition: background 0.3s ease, opacity 0.3s ease;
+
+.si-ping-wrap { 
+  display: flex; 
+  align-items: center; 
+  justify-content: center; 
+  width: 12px; 
+  height: 12px; 
+  min-width: 12px; 
+  flex: 0 0 12px; 
+  
+  /* 1. The Layout Firewall: Completely isolates the dot from 
+     ANY parent transitions, hover effects, or DOM state changes. */
+  contain: strict; 
 }
+
+.si-pdot {
+  display: block;
+  width: 6px; 
+  height: 6px; 
+  min-width: 6px; 
+  flex: 0 0 6px;
+  background: transparent; 
+  cursor: default;
+  transition: background 0.3s ease, opacity 0.3s ease;
+  
+  /* Strip out text/spacing interference */
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-size: 0;
+  line-height: 0;
+  
+  /* 2. The Physical Cookie-Cutter: Even if the browser's GPU tries 
+     to stretch the background paint, this physically masks the render 
+     output to a perfect 3px radius circle no matter what. */
+  border-radius: 50%;
+  clip-path: circle(3px at center);
+  -webkit-clip-path: circle(3px at center);
+}
+
+
+
 .si-pdot.si-live     { background: #22c55e; }
 .si-pdot.si-down     { background: #ef4444; box-shadow: 0 0 5px rgba(239,68,68,0.5); }
 .si-pdot.si-cached   { background: #22c55e; opacity: 0.5; }
