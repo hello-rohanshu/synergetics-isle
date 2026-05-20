@@ -52,6 +52,10 @@ export const sharedPageComponents: SharedLayout = {
   head: Component.Head(),
   header: [],
   afterBody: [
+        Component.ConditionalRender({
+      component: Component.SystemsDashboard(),
+      condition: (page) => page.fileData.slug === "systems-stack",
+    }),
     Component.ConditionalRender({
       component: Component.SynergeticsAI(),
       condition: (page) => page.fileData.slug === "synergetics-ai",
@@ -80,10 +84,6 @@ export const defaultContentPageLayout: PageLayout = {
     Component.ContentMeta(),
     Component.TagList(),
     //Component.SystemsDashboard(),
-    Component.ConditionalRender({
-      component: Component.SystemsDashboard(),
-      condition: (page) => page.fileData.slug === "systems-stack",
-    }),
         Component.ConditionalRender({
       component: Component.TrendsManifest(),
       condition: (page) => page.fileData.slug === "trends-manifest",

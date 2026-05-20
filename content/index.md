@@ -2,55 +2,25 @@
 title: Home
 ---
 
-The website, including this page, is still very much in-the-making. I wrote this up because an empty home page was getting cumbersome.
+Synergetics is nature's own geometry — Buckminster Fuller's attempt to write down the language the universe actually speaks. This is the complete text, free and open.
 
-<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:1.5rem 0">
-  <img src="https://i0.wp.com/www.raptisrarebooks.com/wp-content/uploads/2021/05/rrb-124974.jpg?fit=1000%2C800&ssl=1" style="width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:4px">
-  <img src="https://m.media-amazon.com/images/I/51DKdaY4eFL._AC_UF1000,1000_QL80_.jpg" style="width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:4px">
-  <img src="https://media.newyorker.com/photos/590971dcebe912338a3772fe/16:9/w_1280,c_limit/660108_r27302.jpg" style="width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:4px">
-</div>
+- Instant search across all 1,468 pages
+- AI assistant trained on the complete text
+- Paragraph-level anchor links, one-click copy
+- Open source on GitHub
 
-Buckminster Fuller published his magnum opus Synergetics in the 1970s. It runs to about 1,400 pages across two volumes.
-
-In 1997, R. W. Gray worked with the Fuller Estate to publish Synergetics in full on the web. Popularly called 'Synergetics Online', It has served as the holy grail of Synergetics enthusiasts online since then.
-
-This website attempts to be its modern reincarnation. Hopefully better in every aspect. Here are some features off the top of my head:
-- **Open source** — anyone can contribute a fix, a note, a correction. Here's the [GitHub](https://github.com/hello-rohanshu/synergetics-isle).
-- **Instant full-text search** across all 1,400 pages
-- **AI assistant** trained on the complete text, powered by the world's fastest inference - try it using the AI button
-- **Paragraph-level links** — copy a direct anchor to any section and share it with anyone
-- **Beautiful on every device** — desktop, tablet, phone
-- **Dark mode, reader mode, graph view, explorer panel** to provide a customized reading experience
-
-Future:
-- **Interactive diagrams**
-- **Community** — comments sections, Discord server for better discussions, etc.
+[[Copyright|Start reading →]]
 
 
-<br></br>
+## About this project
 
-# Check Site Health
-<a href="/systems-stack" style="display: inline-block; background: var(--secondary); color: var(--light); padding: 8px 20px; border-radius: 6px; text-decoration: none; font-weight: 500;">
-  Systems Manifest ->
-</a>
+This is Bucky Fuller's magnum opus — Synergetics Volume 1 and Volume 2 — sourced from [R. W. Gray's original scans](http://rwgray.com/synergetics), hosted via Quartz, built as a study environment and community resource for all of time to come.
 
+The links, italics, bold, and equation rendering are under active construction. Everything else is live.
 
-# Check Synergetics Proofreading Audit
-<a href="/frontmatter-audit" style="display: inline-block; background: var(--secondary); color: var(--light); padding: 8px 20px; border-radius: 6px; text-decoration: none; font-weight: 500;">
-  Synergetics Proofreading Audit ->
-</a>
+I suggest joining the [Buckminster Fuller Discord](discord link) for hands-on discussion.
 
-# Check Roadmap/What's done
-<a href="/trends-manifest" style="display: inline-block; background: var(--secondary); color: var(--light); padding: 8px 20px; border-radius: 6px; text-decoration: none; font-weight: 500;">
-  Trends Manifest ->
-</a>
+## Project status
+*(Systems Manifest link here)*
 
-
-
-
-
-<br></br>
-
-# Interactive Diagram Sample
-![[Fig. 100.103 (New)]]
-
+## Comments
