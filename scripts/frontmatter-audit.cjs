@@ -1,39 +1,72 @@
-/**
- * frontmatter-audit.js
- * 
- * Scans the Quartz content directory, reads YAML frontmatter from every
- * markdown file belonging to a configured group, computes checkbox
- * completion percentages for known boolean properties, and writes a
- * JSON report to static/frontmatter-audit.json.
- * 
- * Dependencies: Node.js built-ins + gray-matter (no other packages).
- * 
- * Usage (add to package.json scripts):
- *   "prebuild": "node scripts/frontmatter-audit.js"
- */
+// scripts/frontmatter-audit.js
+// ------------------------------------------------------------------
+// FRONTMATTER AUDIT SCRIPT
+// Scans markdown files, checks boolean frontmatter properties,
+// and writes a completion report to quartz/static/data/frontmatter-audit.json
+// ------------------------------------------------------------------
 
 const fs = require('fs');
 const path = require('path');
 const grayMatter = require('gray-matter');
 
 // ------------------------------------------------------------------
-// CONFIGURATION – easily editable
+// CONFIGURATION
+// Edit this section to add/remove properties or change groups.
+// Each property needs: label (shown in UI) and description (shown in tooltip).
 // ------------------------------------------------------------------
+
 const CONFIG = {
+
+  // Where to find markdown files
   contentDir: "content",
+
+  // Where to save the report
   outputFile: "quartz/static/data/frontmatter-audit.json",
-  booleanProps: [
-    "p-replication",
-    "p-emDash",
-    "p-headings",
-    "p-italics",
-    "p-images",
-    "p-links",
-    "p-equations",
-    "p-structure",
-    "p-links-2"
-  ],
+
+  // Properties to check in frontmatter
+  properties: {
+    "p-replication": {
+      label: "Replication",
+      description: "Content has been replicated/duplicated as needed for the publishing workflow."
+    },
+    "p-emDash": {
+      label: "Em Dashes",
+      description: "Em dashes have been properly formatted and verified throughout the text."
+    },
+    "p-headings": {
+      label: "Headings",
+      description: "Heading hierarchy and structure has been reviewed and finalized."
+    },
+    "p-italics": {
+      label: "Italics",
+      description: "Italic formatting has been applied consistently according to style guide."
+    },
+    "p-images": {
+      label: "Images",
+      description: "All images have been inserted, positioned, and captioned correctly."
+    },
+    "p-links": {
+      label: "Links (Primary)",
+      description: "Primary cross-references and internal links have been added and verified."
+    },
+    "p-equations": {
+      label: "Equations",
+      description: "Mathematical equations and formulas have been formatted and verified."
+    },
+    "p-structure": {
+      label: "Structure",
+      description: "Document structure, sections, and layout have been finalized."
+    },
+    "p-links-2": {
+      label: "Links (Secondary)",
+      description: "Secondary cross-references, footnotes, and external links have been verified."
+    }
+  },
+
+  // Entries to skip (filenames without .md)
   exclusions: [],
+
+  // Groups define how entries are organized in the report
   groups: {
     "Front Matter": [
       "Copyright", "Dedication", "Acknowledgment", "Table of Contents",
@@ -56,9 +89,14 @@ const CONFIG = {
   }
 };
 
+// Derive the list of property names from the config
+const booleanProps = Object.keys(CONFIG.properties);
+
 // ------------------------------------------------------------------
-// Helper: collect all .md files recursively from a directory
+// FILE SCANNING
+// Recursively finds all .md files in a directory
 // ------------------------------------------------------------------
+
 function findMarkdownFiles(dir) {
   const results = [];
   const entries = fs.readdirSync(dir, { withFileTypes: true });
@@ -74,9 +112,11 @@ function findMarkdownFiles(dir) {
 }
 
 // ------------------------------------------------------------------
-// Helper: scan a single entry (file or directory of .md files)
-//         returns { fileCount, trueCounts } or null if nothing found
+// ENTRY SCANNING
+// Given an entry name, finds its markdown file(s) and counts
+// how many have each boolean property set to true.
 // ------------------------------------------------------------------
+
 function scanEntry(entryName) {
   const basePath = path.join(CONFIG.contentDir, entryName);
   const filePath = basePath + '.md';
@@ -84,32 +124,34 @@ function scanEntry(entryName) {
 
   let mdFiles = [];
 
-  // Check for a single file first, then a directory.
+  // Try as a single file first, then as a directory
   if (fs.existsSync(filePath) && fs.statSync(filePath).isFile()) {
     mdFiles = [filePath];
   } else if (fs.existsSync(dirPath) && fs.statSync(dirPath).isDirectory()) {
     mdFiles = findMarkdownFiles(dirPath);
   }
 
-  // Nothing to scan for this entry
+  // No markdown files found for this entry
   if (mdFiles.length === 0) {
     return null;
   }
 
+  // Initialize counts to zero
   const trueCounts = {};
-  CONFIG.booleanProps.forEach(prop => { trueCounts[prop] = 0; });
+  booleanProps.forEach(prop => { trueCounts[prop] = 0; });
 
+  // Scan each file's frontmatter
   for (const file of mdFiles) {
     let data = {};
     try {
       const parsed = grayMatter.read(file);
-      data = parsed.data;               // YAML frontmatter as an object
+      data = parsed.data;
     } catch (err) {
       console.warn(`  Warning: Could not parse frontmatter in ${file} (${err.message})`);
       continue;
     }
 
-    for (const prop of CONFIG.booleanProps) {
+    for (const prop of booleanProps) {
       if (data[prop] === true) {
         trueCounts[prop]++;
       }
@@ -120,14 +162,16 @@ function scanEntry(entryName) {
 }
 
 // ------------------------------------------------------------------
-// Helper: compute percentages, rounding to one decimal place
+// PERCENTAGE CALCULATION
+// Converts true counts to percentages (rounded to 1 decimal)
 // ------------------------------------------------------------------
+
 function computePercentages(trueCounts, fileCount) {
   const percentages = {};
   if (fileCount === 0) {
-    CONFIG.booleanProps.forEach(prop => { percentages[prop] = 0; });
+    booleanProps.forEach(prop => { percentages[prop] = 0; });
   } else {
-    CONFIG.booleanProps.forEach(prop => {
+    booleanProps.forEach(prop => {
       const pct = (trueCounts[prop] / fileCount) * 100;
       percentages[prop] = Math.round(pct * 10) / 10;
     });
@@ -136,22 +180,28 @@ function computePercentages(trueCounts, fileCount) {
 }
 
 // ------------------------------------------------------------------
-// Main audit routine
+// MAIN AUDIT
+// Scans all groups/entries, calculates percentages at every level,
+// and writes the report.
 // ------------------------------------------------------------------
+
 function audit() {
-  // Global accumulators
+
+  // ---- Vault-wide accumulators ----
   let vaultFileCount = 0;
   const vaultTrueCounts = {};
-  CONFIG.booleanProps.forEach(prop => { vaultTrueCounts[prop] = 0; });
+  booleanProps.forEach(prop => { vaultTrueCounts[prop] = 0; });
 
   const groupsResult = {};
   const entriesResult = {};
 
+  // ---- Scan each group ----
   for (const [groupName, entryNames] of Object.entries(CONFIG.groups)) {
     let groupFileCount = 0;
     const groupTrueCounts = {};
-    CONFIG.booleanProps.forEach(prop => { groupTrueCounts[prop] = 0; });
+    booleanProps.forEach(prop => { groupTrueCounts[prop] = 0; });
 
+    // ---- Scan each entry in the group ----
     for (const entryName of entryNames) {
       if (CONFIG.exclusions.includes(entryName)) continue;
 
@@ -161,45 +211,44 @@ function audit() {
         continue;
       }
 
-      // Per‑entry percentages
+      // Per-entry percentages
       entriesResult[entryName] = computePercentages(scan.trueCounts, scan.fileCount);
 
-      // Aggregate into group totals
+      // Add to group totals
       groupFileCount += scan.fileCount;
-      for (const prop of CONFIG.booleanProps) {
+      for (const prop of booleanProps) {
         groupTrueCounts[prop] += scan.trueCounts[prop];
       }
 
-      // Aggregate into vault totals
+      // Add to vault totals
       vaultFileCount += scan.fileCount;
-      for (const prop of CONFIG.booleanProps) {
+      for (const prop of booleanProps) {
         vaultTrueCounts[prop] += scan.trueCounts[prop];
       }
     }
 
-    // Per‑group percentages
+    // Per-group percentages
     groupsResult[groupName] = computePercentages(groupTrueCounts, groupFileCount);
   }
 
-  // Vault‑wide percentages
+  // ---- Vault-wide percentages ----
   const vaultPercentages = computePercentages(vaultTrueCounts, vaultFileCount);
 
-  // Build report object exactly as specified
+  // ---- Build the report ----
   const report = {
     generated: new Date().toISOString(),
-    vault: vaultPercentages,
-    groups: groupsResult,
-    entries: entriesResult
+    properties: CONFIG.properties,   // Label/description info for the UI
+    vault: vaultPercentages,         // Overall completion per property
+    groups: groupsResult,            // Completion per group
+    entries: entriesResult           // Completion per entry
   };
 
-  // Ensure output directory exists
+  // ---- Write to file ----
   const outputDir = path.dirname(CONFIG.outputFile);
   fs.mkdirSync(outputDir, { recursive: true });
-
-  // Write JSON report
   fs.writeFileSync(CONFIG.outputFile, JSON.stringify(report, null, 2), 'utf8');
 
-  // Print summary
+  // ---- Print summary ----
   const entryCount = Object.keys(entriesResult).length;
   console.log(
     `Vault audit complete. Scanned ${vaultFileCount} markdown ` +
@@ -211,6 +260,7 @@ function audit() {
 }
 
 // ------------------------------------------------------------------
-// Run
+// RUN
 // ------------------------------------------------------------------
+
 audit();

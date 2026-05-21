@@ -1,37 +1,75 @@
 {
-  "generated": "2026-05-01T04:15:28.947Z",
+  "generated": "2026-05-20T12:18:04.325Z",
+  "properties": {
+    "p-replication": {
+      "label": "Replication",
+      "description": "Content has been replicated/duplicated as needed for the publishing workflow."
+    },
+    "p-emDash": {
+      "label": "Em Dashes",
+      "description": "Em dashes have been properly formatted and verified throughout the text."
+    },
+    "p-headings": {
+      "label": "Headings",
+      "description": "Heading hierarchy and structure has been reviewed and finalized."
+    },
+    "p-italics": {
+      "label": "Italics",
+      "description": "Italic formatting has been applied consistently according to style guide."
+    },
+    "p-images": {
+      "label": "Images",
+      "description": "All images have been inserted, positioned, and captioned correctly."
+    },
+    "p-links": {
+      "label": "Links (Primary)",
+      "description": "Primary cross-references and internal links have been added and verified."
+    },
+    "p-equations": {
+      "label": "Equations",
+      "description": "Mathematical equations and formulas have been formatted and verified."
+    },
+    "p-structure": {
+      "label": "Structure",
+      "description": "Document structure, sections, and layout have been finalized."
+    },
+    "p-links-2": {
+      "label": "Links (Secondary)",
+      "description": "Secondary cross-references, footnotes, and external links have been verified."
+    }
+  },
   "vault": {
-    "p-replication": 25.4,
-    "p-emDash": 24.9,
-    "p-headings": 25.4,
-    "p-italics": 24.4,
-    "p-images": 25.1,
-    "p-links": 25.1,
-    "p-equations": 24.6,
-    "p-structure": 8.2,
+    "p-replication": 15.4,
+    "p-emDash": 12.3,
+    "p-headings": 15.4,
+    "p-italics": 12.3,
+    "p-images": 13.8,
+    "p-links": 13.8,
+    "p-equations": 10.8,
+    "p-structure": 10.8,
     "p-links-2": 0
   },
   "groups": {
     "Front Matter": {
-      "p-replication": 0,
-      "p-emDash": 0,
-      "p-headings": 0,
-      "p-italics": 0,
-      "p-images": 0,
-      "p-links": 0,
-      "p-equations": 0,
-      "p-structure": 0,
+      "p-replication": 3.3,
+      "p-emDash": 3.3,
+      "p-headings": 3.3,
+      "p-italics": 3.3,
+      "p-images": 3.3,
+      "p-links": 3.3,
+      "p-equations": 3.3,
+      "p-structure": 3.3,
       "p-links-2": 0
     },
     "Main Chapters": {
-      "p-replication": 73.9,
-      "p-emDash": 72.4,
-      "p-headings": 73.9,
-      "p-italics": 70.9,
-      "p-images": 73.1,
-      "p-links": 73.1,
-      "p-equations": 71.6,
-      "p-structure": 23.9,
+      "p-replication": 39.1,
+      "p-emDash": 30.4,
+      "p-headings": 39.1,
+      "p-italics": 30.4,
+      "p-images": 34.8,
+      "p-links": 34.8,
+      "p-equations": 26.1,
+      "p-structure": 26.1,
       "p-links-2": 0
     },
     "Back Matter": {
@@ -81,14 +119,14 @@
       "p-links-2": 0
     },
     "Table of Contents": {
-      "p-replication": 0,
-      "p-emDash": 0,
-      "p-headings": 0,
-      "p-italics": 0,
-      "p-images": 0,
-      "p-links": 0,
-      "p-equations": 0,
-      "p-structure": 0,
+      "p-replication": 100,
+      "p-emDash": 100,
+      "p-headings": 100,
+      "p-italics": 100,
+      "p-images": 100,
+      "p-links": 100,
+      "p-equations": 100,
+      "p-structure": 100,
       "p-links-2": 0
     },
     "A Note on Collaboration": {
@@ -190,94 +228,6 @@
       "p-structure": 0,
       "p-links-2": 0
     },
-    "200.00 Synergetics": {
-      "p-replication": 0,
-      "p-emDash": 0,
-      "p-headings": 0,
-      "p-italics": 0,
-      "p-images": 0,
-      "p-links": 0,
-      "p-equations": 0,
-      "p-structure": 0,
-      "p-links-2": 0
-    },
-    "300.00 Universe": {
-      "p-replication": 0,
-      "p-emDash": 0,
-      "p-headings": 0,
-      "p-italics": 0,
-      "p-images": 0,
-      "p-links": 0,
-      "p-equations": 0,
-      "p-structure": 0,
-      "p-links-2": 0
-    },
-    "400.00 System": {
-      "p-replication": 80,
-      "p-emDash": 80,
-      "p-headings": 80,
-      "p-italics": 60,
-      "p-images": 80,
-      "p-links": 80,
-      "p-equations": 80,
-      "p-structure": 0,
-      "p-links-2": 0
-    },
-    "500.00 Conceptuality": {
-      "p-replication": 100,
-      "p-emDash": 100,
-      "p-headings": 100,
-      "p-italics": 100,
-      "p-images": 100,
-      "p-links": 100,
-      "p-equations": 100,
-      "p-structure": 0,
-      "p-links-2": 0
-    },
-    "600.00 Structure": {
-      "p-replication": 100,
-      "p-emDash": 100,
-      "p-headings": 100,
-      "p-italics": 100,
-      "p-images": 100,
-      "p-links": 100,
-      "p-equations": 100,
-      "p-structure": 0,
-      "p-links-2": 0
-    },
-    "700.00 Tensegrity": {
-      "p-replication": 100,
-      "p-emDash": 100,
-      "p-headings": 100,
-      "p-italics": 100,
-      "p-images": 100,
-      "p-links": 100,
-      "p-equations": 100,
-      "p-structure": 100,
-      "p-links-2": 0
-    },
-    "800.00 Operational Mathematics": {
-      "p-replication": 0,
-      "p-emDash": 0,
-      "p-headings": 0,
-      "p-italics": 0,
-      "p-images": 0,
-      "p-links": 0,
-      "p-equations": 0,
-      "p-structure": 0,
-      "p-links-2": 0
-    },
-    "900.00 Modelability": {
-      "p-replication": 100,
-      "p-emDash": 100,
-      "p-headings": 100,
-      "p-italics": 100,
-      "p-images": 100,
-      "p-links": 100,
-      "p-equations": 100,
-      "p-structure": 69.6,
-      "p-links-2": 0
-    },
     "1000.00 Omnitopology": {
       "p-replication": 100,
       "p-emDash": 75,
@@ -312,17 +262,6 @@
       "p-links-2": 0
     },
     "Afterpiece": {
-      "p-replication": 0,
-      "p-emDash": 0,
-      "p-headings": 0,
-      "p-italics": 0,
-      "p-images": 0,
-      "p-links": 0,
-      "p-equations": 0,
-      "p-structure": 0,
-      "p-links-2": 0
-    },
-    "32 Color Plates": {
       "p-replication": 0,
       "p-emDash": 0,
       "p-headings": 0,
