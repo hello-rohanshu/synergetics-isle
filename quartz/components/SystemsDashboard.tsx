@@ -530,7 +530,6 @@ SystemsDashboard.css = `
   width: 100%; /* Force full parent width */
   gap: 16px;
   background: var(--light);
-  border: 1px solid var(--lightgray);
   border-radius: var(--radius-md, 6px);
   padding: 12px 16px;
   margin-bottom: 16px;
@@ -584,8 +583,8 @@ SystemsDashboard.css = `
   color: #ea580c;
 }
 .si-summary-neglected-badge {
-  background: rgba(158, 158, 158, 0.15);
-  color: #757575;
+  background: var(--highlight);
+  color: var(--secondary);
 }
 
 /* Summary card dot */
