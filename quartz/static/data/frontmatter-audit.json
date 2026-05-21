@@ -1,41 +1,41 @@
 {
-  "generated": "2026-05-20T12:18:04.325Z",
+  "generated": "2026-05-21T03:15:19.857Z",
   "properties": {
     "p-replication": {
       "label": "Replication",
-      "description": "Content has been replicated/duplicated as needed for the publishing workflow."
+      "description": "Replication of the text from the source"
     },
     "p-emDash": {
       "label": "Em Dashes",
-      "description": "Em dashes have been properly formatted and verified throughout the text."
+      "description": "Displaying of Em Dashes, replacing artifacts like double underscores "
     },
     "p-headings": {
       "label": "Headings",
-      "description": "Heading hierarchy and structure has been reviewed and finalized."
+      "description": "Proper hierarchy and existance of headings throughout the text "
     },
     "p-italics": {
       "label": "Italics",
-      "description": "Italic formatting has been applied consistently according to style guide."
+      "description": "Application of italics throughout the text"
     },
     "p-images": {
       "label": "Images",
-      "description": "All images have been inserted, positioned, and captioned correctly."
+      "description": "Replication of all images as present in the original text"
     },
     "p-links": {
-      "label": "Links (Primary)",
-      "description": "Primary cross-references and internal links have been added and verified."
+      "label": "Links (Entry)",
+      "description": "Marking of text which operate as link doorways"
     },
     "p-equations": {
       "label": "Equations",
-      "description": "Mathematical equations and formulas have been formatted and verified."
+      "description": "Proper rendering of equations, using LaTex, SVGs, etc."
     },
     "p-structure": {
       "label": "Structure",
-      "description": "Document structure, sections, and layout have been finalized."
+      "description": "Confirmation of right structure, including tables and spacing"
     },
     "p-links-2": {
-      "label": "Links (Secondary)",
-      "description": "Secondary cross-references, footnotes, and external links have been verified."
+      "label": "Links (Exit)",
+      "description": "Connecting the primarly link doorways to their actual destination"
     }
   },
   "vault": {

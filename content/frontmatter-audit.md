@@ -1,3 +1,3 @@
 ---
-title: Synergetics Proofreading
+title: Proofreading Audit
 ---
