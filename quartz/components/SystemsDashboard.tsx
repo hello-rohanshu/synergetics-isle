@@ -404,12 +404,14 @@ const SystemsDashboard: QuartzComponent = ({ fileData, allFiles }: QuartzCompone
 
   const counts = { active: 0, wip: 0, degraded: 0, down: 0, neglected: 0, total: roots.length }
 
-  // Logic decoupled: System gets counted for ops status regardless of attestation freshness
+  // Mutually exclusive counting: sum of neglected + ops statuses will equal total cards
   for (const r of roots) {
     const isFresh = getDaysSince(r.attestation) <= 21
-    if (!isFresh) counts.neglected++
-
-    counts[getRolledStatus(r)]++
+    if (!isFresh) {
+      counts.neglected++
+    } else {
+      counts[getRolledStatus(r)]++
+    }
   }
 
   return (
@@ -736,8 +738,8 @@ SystemsDashboard.css = `
 .si-attest-stale { color: #ca8a04; }
 .si-attest-old   { color: #dc2626; }
 
-.si-panel-status-neglected .si-attest-stale { color: #cb9713; }
-.si-panel-status-neglected .si-attest-old   { color: #b91c1c; }
+.si-panel-status-neglected .si-attest-stale { color: #d4a52d; }
+.si-panel-status-neglected .si-attest-old   { color: #c23232; }
 
 .si-panel-body { display: flex; flex-direction: column; padding: 4px 8px 6px; }
 
