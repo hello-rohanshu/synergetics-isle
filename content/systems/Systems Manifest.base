@@ -1,0 +1,41 @@
+filters:
+  and:
+    - file.folder != "templates"
+    - file.ext != "base"
+    - file.ext != "py"
+formulas:
+  no backlink: file.hasLink(this.file)
+  power: |-
+    if(file.backlinks.length == 0 && if(children, children.length, 0) > 0, "Root",
+       if(file.backlinks.length > 0 && if(children, children.length, 0) > 0, "Branch",
+          if(file.backlinks.length > 0 && if(children, children.length, 0) == 0, "Leaf",
+             "Orphan")))
+properties:
+  formula.no backlink:
+    displayName: testing
+  note.nonCritical:
+    displayName: critical
+views:
+  - type: table
+    name: Table
+    groupBy:
+      property: formula.power
+      direction: DESC
+    order:
+      - formula.power
+      - file.name
+      - file.backlinks
+      - status
+      - retired
+      - nonCritical
+      - children
+      - alternatives
+      - url
+      - attestation
+    sort: []
+    columnSize:
+      file.backlinks: 147
+      note.children: 285
+  - type: cards
+    name: View
+    image: formula.power

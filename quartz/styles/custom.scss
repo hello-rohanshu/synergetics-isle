@@ -3,21 +3,135 @@
 
 // put your custom CSS here!
 
-// ──── TYPOGRAPHY ───────────────────────────────────────────────
-.page-title a {
-    font-family: "Bebas Neue", sans-serif;
-    font-size: 2.618rem;
-    font-weight: 700;
-    display: inline-block;
-    line-height: 1;
-    //color: #6D0015; //color of the original synergetics 1 book
+
+// ============================================================
+// LOCAL FONTS (@font-face declarations)
+// Font files served from /static/fonts/
+// ============================================================
+
+// Inter - Body
+@font-face {
+    font-family: 'Inter';
+    src: url('/static/fonts/inter-v20-latin-regular.woff2') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
 }
+
+@font-face {
+    font-family: 'Inter';
+    src: url('/static/fonts/inter-v20-latin-italic.woff2') format('woff2');
+    font-weight: 400;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Inter';
+    src: url('/static/fonts/inter-v20-latin-600.woff2') format('woff2');
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Inter';
+    src: url('/static/fonts/inter-v20-latin-600italic.woff2') format('woff2');
+    font-weight: 600;
+    font-style: italic;
+    font-display: swap;
+}
+
+// Literata - Headings
+@font-face {
+    font-family: 'Literata';
+    src: url('/static/fonts/literata-v40-latin-600.woff2') format('woff2');
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+}
+
+// // Bebas Neue - Site title
+// @font-face {
+//     font-family: 'Bebas Neue';
+//     src: url('/static/fonts/bebas-neue-v16-latin-regular.woff2') format('woff2');
+//     font-weight: 400;
+//     font-style: normal;
+//     font-display: swap;
+// }
+
+// Ubuntu Sans - Site title
+@font-face {
+    font-family: 'Ubuntu Sans';
+    src: url('/static/fonts/ubuntu-sans-v4-latin-700.woff2') format('woff2');
+    // font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+// JetBrains Mono - Code
+@font-face {
+    font-family: 'JetBrains Mono';
+    src: url('/static/fonts/jetbrains-mono-v24-latin-regular.woff2') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+// ============================================================
+
+
+// ──── TYPOGRAPHY ───────────────────────────────────────────────
+// .page-title a {
+//     //font-family: "Abril Fatface", sans-serif;
+//     //font-size: calc(var(--text-lg) + var(--text-xs)); // 1.618 + 0.618 = 2.236rem = φ^√5
+//     //font-size: 1.732rem; // root 4
+//     //font-weight: 700;
+//     display: inline-block;
+//     line-height: 1;
+//     //color: #6D0015; //color of the original synergetics 1 book
+// }
+
+
+
+.page-title a {
+    // font-weight: 400;
+    // -webkit-text-stroke: 1px currentColor;
+    // paint-order: stroke fill;
+    letter-spacing: -2.618px;
+    font-size: 1.899rem; // φ^1.25
+}
+
+
+
+// font-size: 3.236rem, 2.618rem, 2.058rem;
+
+
+// #quartz-body h1 {
+//     // font-size: calc(var(--text-sm) + var(--text-base));
+//     font-size: var(--text-xl-minus);
+//     // font-size: 1.899rem;
+// }
+
+// #quartz-body h2 {
+//     font-size: calc(var(--text-sm) + var(--text-base));
+//     // font-size: var(--text-lg);
+// }
+
+#quartz-body h1.article-title {
+    font-size: var(--text-xl);
+}
+
+.content-meta {
+    margin-bottom: 1.618rem;
+}
+
 
 // [saved-theme="dark"] .page-title a {
 //     color: #982117; //color of second synergetics volume #F62427 x 0.618
 // }
 
-// font-size: 3.236rem, 2.618rem;
+
 
 // .page-title a::after {
 //     content: "R. Buckminster Fuller";
@@ -60,9 +174,35 @@
 
 
 
-
+// Adjusting Literta to be as big as Inter for the same on-paper font size
 #quartz-body a.folder-title {
-    font-size: 1rem;
+    font-size: 1.0618rem;
+}
+
+#quartz-body h5 {
+    font-size: 1.0618rem;
+}
+
+div.left.sidebar h1,
+div.left.sidebar h2,
+div.left.sidebar h3,
+div.left.sidebar h4,
+div.left.sidebar h5,
+div.left.sidebar h6,
+div.right.sidebar h1,
+div.right.sidebar h2,
+div.right.sidebar h3,
+div.right.sidebar h4,
+div.right.sidebar h5,
+div.right.sidebar h6 {
+    font-size: 1.0618rem;
+}
+
+// the sidebar heading css was making the title smaller too
+@media all and (min-width: 801px) {
+    .page-title a {
+        font-size: 2.618rem;
+    }
 }
 
 // p, li {
@@ -70,22 +210,6 @@
 // }
 
 
-
-@media all and ($mobile) {
-    .search .search-button>p {
-        display: none;
-    }
-
-    .search .search-button {
-        padding: 0;
-        width: 2rem;
-    }
-
-    .search .search-button {
-        border: none;
-        margin-right: -4px;
-    }
-}
 
 @media all and ($mobile) {
     #quartz-body>div.left.sidebar>div.flex-component {
@@ -99,44 +223,174 @@
 // φ⁻² = 0.382 → thumb at rest | φ⁻¹ = 0.618 → thumb on hover
 // 8px track, 5px thumb, 3px radius — each one φ step from the last
 
+
+/* ── Scrollbar ──────────────────────────────────────────────────────────────── */
+
+/* Page root — overlay via margin trick, thin and slightly more visible */
 html {
-    overflow-y: scroll;
-    scrollbar-gutter: stable;
-}
-
-::-webkit-scrollbar {
-    width: 10px;
-    height: 10px;
-}
-
-
-::-webkit-scrollbar-track {
-    background: transparent;
-}
-
-::-webkit-scrollbar-thumb {
-    background: rgba(128, 128, 128, 0.382);
-    border-radius: 4px;
-    border: 2px solid transparent; // scaled from 1.5
-    background-clip: padding-box;
-}
-
-::-webkit-scrollbar-thumb:hover {
-    background: rgba(128, 128, 128, 0.618);
-    background-clip: padding-box;
-}
-
-::-webkit-scrollbar-corner {
-    background: transparent;
-}
-
-* {
+    overflow-y: auto;
+    margin-right: calc(100% - 100vw);
     scrollbar-width: thin;
-    scrollbar-color: rgba(128, 128, 128, 0.382) transparent;
+    scrollbar-color: rgba(128, 128, 128, 0.55) transparent;
 }
 
+html::-webkit-scrollbar-button {
+    display: none;
+    height: 0;
+    width: 0;
+}
+
+html::-webkit-scrollbar {
+    width: 8px;
+}
+
+html::-webkit-scrollbar-thumb {
+    background: rgba(128, 128, 128, 0.55);
+    border-radius: 10px;
+}
+
+html::-webkit-scrollbar-thumb:hover {
+    background: rgba(128, 128, 128, 0.75);
+}
+
+/* Inner scrollable elements — same width, fades in on hover */
+*:not(html) {
+    scrollbar-width: thin;
+    scrollbar-color: transparent transparent;
+}
+
+*:not(html):hover {
+    scrollbar-color: rgba(128, 128, 128, 0.55) transparent;
+}
+
+*:not(html)::-webkit-scrollbar {
+    width: 8px;
+}
+
+*:not(html)::-webkit-scrollbar-thumb {
+    background: transparent;
+    border-radius: 10px;
+    transition: background 0.2s ease;
+}
+
+*:not(html):hover::-webkit-scrollbar-thumb {
+    background: rgba(128, 128, 128, 0.55);
+}
+
+*:not(html)::-webkit-scrollbar-thumb:hover {
+    background: rgba(128, 128, 128, 0.75);
+}
+
+
+
+
+// ---------------------------------------------------------------------
+
+
+
+// ---------------------------------------------------------------------
 // Prevent Quartz's inner wrapper from stealing scroll away from viewport edge
 #quartz-body,
 .page {
     overflow: visible !important;
 }
+
+// ---------------------------------------------------------------------------
+
+
+// // ROOOOT DEFINITIONS ATTEMPT ----------------------------------------------------
+// // ------------------------------------------------------------------------------
+// #quartz-body h1 {
+//   font-size: 1.732rem; /* √3 */
+// }
+
+// #quartz-body h2 {
+//   font-size: 1.581rem; /* √2.5 */
+// }
+
+// #quartz-body h3 {
+//   font-size: 1.414rem; /* √2 */
+// }
+
+// #quartz-body h4,
+// #quartz-body h5,
+// #quartz-body h6 {
+//   font-size: 1.000rem; /* √1 */
+// }
+
+
+
+
+
+// -------------------------------------------------------------------------
+// ---- Navbar Icons alignment -----------------------------
+// -------------------------------------------------------------------------
+
+.flex-component {
+    display: flex;
+    align-items: center;
+}
+
+// Search: hide text label on mobile, keep icon only
+@media all and ($mobile) {
+    .search .search-button>p {
+        display: none;
+    }
+
+    .search .search-button {
+        padding: 0;
+        width: 2rem;
+        border: none;
+        margin-right: -4px;
+        margin-bottom: -2px;
+    }
+
+    .search-button svg .search-path {
+
+        path,
+        circle {
+            stroke-width: 2px;
+        }
+    }
+}
+
+// AI pill: center text
+.ai-button .ai-pill {
+    text-indent: 0.08em;
+    margin-bottom: -2px;
+}
+
+// trying to fix the ai button and site title retaining focus on a mobile even AFTER being tapped
+* {
+    -webkit-tap-highlight-color: transparent;
+}
+
+.ai-button:active {
+    color: inherit;
+}
+
+// Darkmode + readermode: proper flex centering instead of absolute positioning
+.readermode,
+.darkmode {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    & svg {
+        position: static;
+        top: unset;
+    }
+}
+
+// -------------------------------------------------------------------------
+// -------------------------------------------------------------------------
+
+// Embeds have too big titles
+
+#quartz-body .center article blockquote h1 {
+  font-size: 1.0618rem;
+  font-weight: 500;
+  margin-bottom: 0.25rem;
+}
+
+// --------------------------------------------------------------------------

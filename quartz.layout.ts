@@ -2,7 +2,13 @@ import { PageLayout, SharedLayout } from "./quartz/cfg"
 import * as Component from "./quartz/components"
 
 const explorerConfig = {
-  filterFn: (node: any) => node.data?.frontmatter?.explorer !== false,
+  // Hide from explorer
+  filterFn: (node: any) => {
+    const hidden = new Set(["systems", "synergetics-ai", "systems-stack", "frontmatter-audit", "trends-manifest"]);
+    const slug = node.data?.slug ?? "";
+    const name = (node.path || node.displayName || "").toLowerCase();
+    return !hidden.has(slug) && !hidden.has(name);
+  },
   sortFn: (a: any, b: any) => {
     const order: Record<string, number> = {
       "Copyright": 1,
@@ -46,9 +52,17 @@ export const sharedPageComponents: SharedLayout = {
   head: Component.Head(),
   header: [],
   afterBody: [
+        Component.ConditionalRender({
+      component: Component.SystemsDashboard(),
+      condition: (page) => page.fileData.slug === "systems-stack",
+    }),
     Component.ConditionalRender({
       component: Component.SynergeticsAI(),
       condition: (page) => page.fileData.slug === "synergetics-ai",
+    }),
+    Component.ConditionalRender({
+      component: Component.FrontmatterAudit(),
+      condition: (page) => page.fileData.slug === "frontmatter-audit",
     }),
   ],
   footer: Component.Footer({
@@ -69,6 +83,11 @@ export const defaultContentPageLayout: PageLayout = {
     Component.ArticleTitle(),
     Component.ContentMeta(),
     Component.TagList(),
+    //Component.SystemsDashboard(),
+        Component.ConditionalRender({
+      component: Component.TrendsManifest(),
+      condition: (page) => page.fileData.slug === "trends-manifest",
+    }),
   ],
   left: [
     Component.PageTitle(),

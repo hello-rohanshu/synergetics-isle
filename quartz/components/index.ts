@@ -25,6 +25,9 @@ import Flex from "./Flex"
 import ConditionalRender from "./ConditionalRender"
 import SynergeticsAI from "./SynergeticsAI"
 import AIButton from "./AIButton"
+import SystemsDashboard from "./SystemsDashboard"
+import FrontmatterAudit from "./FrontmatterAudit"
+import TrendsManifest from "./TrendsManifest"
 
 export {
   ArticleTitle,
@@ -54,4 +57,7 @@ export {
   ConditionalRender,
   SynergeticsAI,
   AIButton,
+  SystemsDashboard,
+  FrontmatterAudit,
+  TrendsManifest,
 }
