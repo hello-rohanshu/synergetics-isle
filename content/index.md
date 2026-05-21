@@ -63,7 +63,7 @@ title: Home
 
 # About
 
-Buckminster Fuller's attempt to write down the coordinate system of the universe. Complete text, free and open — 1,468 pages, searchable, linkable, explorable. Sourced from [R. W. Gray's original scans](http://rwgray.com/synergetics), built as a study environment and community resource for all of time to come.
+Buckminster Fuller's attempt to write down the coordinate system of the universe. Complete text, free and open — 1,468 pages, searchable, linkable, explorable. Sourced from [R. W. Gray's original scans](https://rwgrayprojects.com/synergetics/synergetics.html), built as a study environment and community resource for all of time to come.
 
 - Instant search across all 1,468 pages
 - AI assistant trained on the complete text ([[synergetics-ai|Try]])
