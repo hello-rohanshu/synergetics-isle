@@ -51,7 +51,7 @@ const relativeDate = (dateStr: string): string => {
   if (days === 0) return "Reviewed today"
   if (days === 1) return "Reviewed yesterday"
   if (days < 7) return `Reviewed ${days}d ago`
-  if (days < 30) return `Reviewed ${Math.floor(days / 7)}w ago`
+  if (days < 60) return `Reviewed ${Math.floor(days / 7)}w ago`
   if (days < 365) return `Reviewed ${Math.floor(days / 30)}mo ago`
   return `Reviewed ${Math.floor(days / 365)}y ago`
 }
@@ -59,8 +59,8 @@ const relativeDate = (dateStr: string): string => {
 const getAttestColorClass = (dateStr: string): string => {
   if (!dateStr) return "si-attest-old"
   const days = getDaysSince(dateStr)
-  if (days <= 14) return "si-attest-fresh"
-  if (days <= 60) return "si-attest-stale"
+  if (days <= 21) return "si-attest-fresh"
+  if (days <= 49) return "si-attest-stale"
   return "si-attest-old"
 }
 
@@ -354,26 +354,38 @@ const TreeNode = ({ node, depth = 0, defaultDepth = 2 }: {
 
 const Panel = ({ root }: { root: SystemNode }) => {
   const rolled = getRolledStatus(root)
+  const days = getDaysSince(root.attestation)
+  const isFresh = days <= 21
+
   const accent = getPanelAccentColor(rolled)
   const attestColor = getAttestColorClass(root.attestation)
   const relTime = relativeDate(root.attestation)
 
+  const panelClass = isFresh ? `si-panel-status-${rolled}` : `si-panel-status-neglected`
+  const panelBorderColor = isFresh ? accent : `#9e9e9e`
+
   return (
-    <div class={`si-panel si-panel-status-${rolled}`} style={`border-left-color: ${accent}`} data-si-panel>
+    <div class={`si-panel ${panelClass}`} style={`border-left-color: ${panelBorderColor};`} data-si-panel>
       <div class="si-panel-header">
         <div class="si-panel-title-group">
-          <div class="si-panel-title-row">
-            {root.url && <Favicon url={root.url} />}
-            <span class="si-panel-name">{root.name}</span>
+          {/* Greyscale wrapper strictly around the Title row so it naturally stacks with the attestation text below */}
+          <div class={!isFresh ? "si-panel-greyscale" : ""}>
+            <div class="si-panel-title-row">
+              {root.url && <Favicon url={root.url} />}
+              <span class="si-panel-name">{root.name}</span>
+            </div>
           </div>
+          {/* Attestation remains safely untouched right underneath */}
           <span class={`si-attest ${attestColor}`}>{relTime}</span>
         </div>
       </div>
       {root.children.length > 0 && (
-        <div class="si-panel-body">
-          {root.children.map(child => (
-            <TreeNode key={child.slug} node={child} depth={1} defaultDepth={2} />
-          ))}
+        <div class={!isFresh ? "si-panel-greyscale" : ""}>
+          <div class="si-panel-body">
+            {root.children.map(child => (
+              <TreeNode key={child.slug} node={child} depth={1} defaultDepth={2} />
+            ))}
+          </div>
         </div>
       )}
     </div>
@@ -383,8 +395,6 @@ const Panel = ({ root }: { root: SystemNode }) => {
 // ── Main Component ───────────────────────────────────────────────────────────
 
 const SystemsDashboard: QuartzComponent = ({ fileData, allFiles }: QuartzComponentProps) => {
-  //if (fileData.slug !== "systems-stack") return null
-
   const roots = buildTree(allFiles)
   const severityOf = (n: SystemNode) => {
     const s = getRolledStatus(n)
@@ -392,65 +402,91 @@ const SystemsDashboard: QuartzComponent = ({ fileData, allFiles }: QuartzCompone
   }
   roots.sort((a, b) => severityOf(a) - severityOf(b))
 
-  const counts = { active: 0, wip: 0, degraded: 0, down: 0 }
+  const counts = { active: 0, wip: 0, degraded: 0, down: 0, neglected: 0, total: roots.length }
+
+  // Logic decoupled: System gets counted for ops status regardless of attestation freshness
   for (const r of roots) {
+    const isFresh = getDaysSince(r.attestation) <= 21
+    if (!isFresh) counts.neglected++
+
     counts[getRolledStatus(r)]++
   }
 
   return (
     <div class="si-root">
       <div class="si-summary-card">
-        <div class="si-summary-col">
-          <div class="si-summary-badge si-summary-active-badge">
-            <span class="si-summary-dot si-summary-dot-active"></span>
-            <span class="si-summary-count">{counts.active}</span>
-            <span class="si-summary-label">Active</span>
+        {/* Left Side: Maintenance/Documentation Health */}
+        <div class="si-summary-maintenance">
+          <div class={`si-summary-badge ${counts.neglected > 0 ? 'si-summary-neglected-badge' : 'si-summary-zero-badge'}`}>
+            <span class="si-summary-dot" style={counts.neglected > 0 ? "background: #757575;" : "background: currentColor; opacity: 0.5;"}></span>
+            <span class="si-summary-count">{counts.neglected} / {counts.total}</span>
+            <span class="si-summary-label">Neglected</span>
           </div>
         </div>
+
         <div class="si-summary-divider"></div>
-        <div class="si-summary-col">
-          {counts.wip > 0 ? (
-            <div class="si-badge si-badge-direct si-badge-wip si-summary-badge">
-              <span class="si-badge-dot"></span>
-              <span class="si-summary-count">{counts.wip}</span>
-              <span>WIP</span>
-            </div>
-          ) : (
-            <div class="si-summary-badge si-summary-zero-badge">
-              <span class="si-summary-count">0</span>
-              <span class="si-summary-label">WIP</span>
-            </div>
-          )}
-        </div>
-        <div class="si-summary-divider"></div>
-        <div class="si-summary-col">
-          {counts.degraded > 0 ? (
-            <div class="si-summary-badge si-summary-degraded-badge">
-              <span class="si-summary-dot si-summary-dot-degraded"></span>
-              <span class="si-summary-count">{counts.degraded}</span>
-              <span class="si-summary-label">Degraded</span>
-            </div>
-          ) : (
-            <div class="si-summary-badge si-summary-zero-badge">
-              <span class="si-summary-count">0</span>
-              <span class="si-summary-label">Degraded</span>
-            </div>
-          )}
-        </div>
-        <div class="si-summary-divider"></div>
-        <div class="si-summary-col">
-          {counts.down > 0 ? (
-            <div class="si-badge si-badge-direct si-badge-down si-summary-badge">
-              <span class="si-badge-dot"></span>
-              <span class="si-summary-count">{counts.down}</span>
-              <span>Down</span>
-            </div>
-          ) : (
-            <div class="si-summary-badge si-summary-zero-badge">
-              <span class="si-summary-count">0</span>
-              <span class="si-summary-label">Down</span>
-            </div>
-          )}
+
+        {/* Right Side: Operational Health */}
+        <div class="si-summary-ops">
+          <div class="si-summary-col">
+            {counts.active > 0 ? (
+              <div class="si-summary-badge si-summary-active-badge">
+                <span class="si-summary-dot si-summary-dot-active"></span>
+                <span class="si-summary-count">{counts.active}</span>
+                <span class="si-summary-label">Active</span>
+              </div>
+            ) : (
+              <div class="si-summary-badge si-summary-zero-badge">
+                <span class="si-summary-count">0</span>
+                <span class="si-summary-label">Active</span>
+              </div>
+            )}
+          </div>
+
+          <div class="si-summary-col">
+            {counts.wip > 0 ? (
+              <div class="si-badge si-badge-direct si-badge-wip si-summary-badge">
+                <span class="si-badge-dot"></span>
+                <span class="si-summary-count">{counts.wip}</span>
+                <span class="si-summary-label">WIP</span>
+              </div>
+            ) : (
+              <div class="si-summary-badge si-summary-zero-badge">
+                <span class="si-summary-count">0</span>
+                <span class="si-summary-label">WIP</span>
+              </div>
+            )}
+          </div>
+
+          <div class="si-summary-col">
+            {counts.degraded > 0 ? (
+              <div class="si-summary-badge si-summary-degraded-badge">
+                <span class="si-summary-dot si-summary-dot-degraded"></span>
+                <span class="si-summary-count">{counts.degraded}</span>
+                <span class="si-summary-label">Degraded</span>
+              </div>
+            ) : (
+              <div class="si-summary-badge si-summary-zero-badge">
+                <span class="si-summary-count">0</span>
+                <span class="si-summary-label">Degraded</span>
+              </div>
+            )}
+          </div>
+
+          <div class="si-summary-col">
+            {counts.down > 0 ? (
+              <div class="si-badge si-badge-direct si-badge-down si-summary-badge">
+                <span class="si-badge-dot"></span>
+                <span class="si-summary-count">{counts.down}</span>
+                <span class="si-summary-label">Down</span>
+              </div>
+            ) : (
+              <div class="si-summary-badge si-summary-zero-badge">
+                <span class="si-summary-count">0</span>
+                <span class="si-summary-label">Down</span>
+              </div>
+            )}
+          </div>
         </div>
       </div>
 
@@ -487,21 +523,44 @@ SystemsDashboard.css = `
 }
 
 .si-summary-card {
-  display: grid;
-  grid-template-columns: 1fr auto 1fr auto 1fr auto 1fr;
+  display: flex;
   align-items: center;
+  width: 100%; /* Force full parent width */
+  gap: 16px;
   background: var(--light);
   border: 1px solid var(--lightgray);
   border-radius: var(--radius-md, 6px);
-  padding: 8px 12px;
+  padding: 12px 16px;
   margin-bottom: 16px;
   box-shadow: 0 1px 3px rgba(0,0,0,0.04);
 }
+
+.si-summary-maintenance {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+.si-summary-maintenance .si-summary-badge {
+  padding: 4px 12px;
+}
+.si-summary-maintenance .si-summary-count {
+  font-size: 14px;
+}
+
+.si-summary-ops {
+  display: flex;
+  align-items: center;
+  flex: 1; /* Takes up all remaining space to the right */
+  gap: 8px;
+}
+
 .si-summary-col {
   display: flex;
-  justify-content: center;
   align-items: center;
+  flex: 1; /* Forces each operational badge to share the space equally */
+  justify-content: center; /* Centers the badge within its equal share */
 }
+
 .si-summary-badge {
   display: inline-flex;
   align-items: center;
@@ -513,6 +572,7 @@ SystemsDashboard.css = `
   border-radius: 20px;
   white-space: nowrap;
 }
+
 .si-summary-active-badge {
   background: rgba(34, 197, 94, 0.1);
   color: #16a34a;
@@ -521,6 +581,11 @@ SystemsDashboard.css = `
   background: rgba(249, 115, 22, 0.1);
   color: #ea580c;
 }
+.si-summary-neglected-badge {
+  background: rgba(158, 158, 158, 0.15);
+  color: #757575;
+}
+
 /* Summary card dot */
 .si-summary-dot {
   width: 6px;
@@ -530,12 +595,9 @@ SystemsDashboard.css = `
   overflow: hidden;
   line-height: 0;
 }
-.si-summary-dot-active {
-  background: #22c55e;
-}
-.si-summary-dot-degraded {
-  background: #f97316;
-}
+.si-summary-dot-active { background: #22c55e; }
+.si-summary-dot-degraded { background: #f97316; }
+
 .si-summary-zero-badge {
   background: var(--lightgray);
   color: var(--gray);
@@ -552,27 +614,42 @@ SystemsDashboard.css = `
   width: 1px;
   height: 24px;
   background: var(--lightgray);
+  flex-shrink: 0;
 }
 .si-summary-card .si-badge {
   padding: 2px 8px;
   gap: 6px;
   font-size: 11px;
 }
-@media (max-width: 480px) {
+
+/* Mobile Responsiveness */
+@media (max-width: 600px) {
   .si-summary-card {
-    grid-template-columns: 1fr;
-    gap: 6px;
-    padding: 10px;
+    flex-direction: column;
+    align-items: stretch;
+    padding: 14px;
+    gap: 14px;
   }
   .si-summary-divider {
-    display: none;
+    width: 100%;
+    height: 1px;
+    background: var(--lightgray);
   }
-  .si-summary-col {
-    justify-content: space-between;
-  }
-  .si-summary-badge {
+  .si-summary-maintenance .si-summary-badge {
     width: 100%;
     justify-content: center;
+    padding: 8px 12px;
+    font-size: 12px;
+  }
+  .si-summary-ops {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .si-summary-ops .si-summary-badge {
+    width: 100%;
+    justify-content: center;
+    padding: 6px;
   }
 }
 
@@ -606,6 +683,10 @@ SystemsDashboard.css = `
   width: 100%;
   transition: background 0.2s ease;
 }
+.si-panel-greyscale { 
+  filter: grayscale(1); 
+  opacity: 0.6;
+}
 .si-panel-status-active {
   background-color: rgba(34, 197, 94, 0.04);
 }
@@ -618,6 +699,14 @@ SystemsDashboard.css = `
 .si-panel-status-down {
   background-color: rgba(239, 68, 68, 0.04);
 }
+
+.si-panel-status-neglected {
+  background-color: rgba(100, 100, 100, 0.12);  /* light mode - darker grey */
+}
+.dark .si-panel-status-neglected {
+  background-color: rgba(158, 158, 158, 0.1);   /* dark mode */
+}
+
 .dark .si-panel-status-active {
   background-color: rgba(34, 197, 94, 0.08);
 }
@@ -632,7 +721,7 @@ SystemsDashboard.css = `
 }
 
 .si-panel-header {
-  display: flex; align-items: flex-start; justify-content: space-between; gap: 12px;
+  display: flex; align-items: flex-start; justifney-content: space-between; gap: 12px;
   padding: 8px 12px 8px 11px;
   border-bottom: 1px solid var(--lightgray);
   background: rgba(0,0,0,0.012);
@@ -646,6 +735,9 @@ SystemsDashboard.css = `
 .si-attest-fresh { color: #16a34a; }
 .si-attest-stale { color: #ca8a04; }
 .si-attest-old   { color: #dc2626; }
+
+.si-panel-status-neglected .si-attest-stale { color: #cb9713; }
+.si-panel-status-neglected .si-attest-old   { color: #b91c1c; }
 
 .si-panel-body { display: flex; flex-direction: column; padding: 4px 8px 6px; }
 
@@ -917,7 +1009,3 @@ SystemsDashboard.afterDOMLoaded = `
 `
 
 export default (() => SystemsDashboard) satisfies QuartzComponentConstructor
-
-
-
-
